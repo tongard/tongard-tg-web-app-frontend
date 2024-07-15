@@ -1,8 +1,10 @@
 # Tongard - Telegram Mini App (FRONTEND) 🌟
 
-![Nobe](./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.03.png)
-![Task List](./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.28.png)
-![Email Verification](./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.59.png)
+<p align="center">
+  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.03.png" alt="Nobe" width="200"/>
+  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.28.png" alt="Task List" width="200"/>
+  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.59.png" alt="Email Verification" width="200"/>
+</p>
 
 ## What is Tongard? 🤔
 Tongard is a comprehensive open-source solution for building Telegram mini apps (TMA). Designed with modern web technologies, it aims to provide an easy and efficient way to create engaging mini apps for the Telegram platform.

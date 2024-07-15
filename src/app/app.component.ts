@@ -55,7 +55,6 @@ export class AppComponent {
             postEvent('web_app_expand');
             const haptic = initHapticFeedback()
             haptic.notificationOccurred('success');
-            
         }
 
         this.subscription.unsubscribe();
