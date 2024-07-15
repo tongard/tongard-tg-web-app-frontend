@@ -1,0 +1,22 @@
+{
+    "GAMES": "الألعاب",
+    "FARMING": "الزراعة",
+    "START_FARMING": "بدء الزراعة",
+    "TASK_EMAIL_VERIFY": "التحقق",
+    "TASK_EMAIL_CODE": "سنرسل رمزًا مكونًا من 6 أرقام إلى هذا البريد الإلكتروني",
+    "TASK_SENT_CODE": "تم إرسال رمز التحقق إلى",
+    "TASK_SEND_CODE": "إرسال الرمز",
+    "TASK_CONGR_CODE": "رائع! لقد حصلت على 7777",
+    "NEXT": "التالي",
+    "CLAIM": "المطالبة",
+    "START": "فتح",
+    "TASKS": "المهام",
+    "TASK_REWARD": "ستحصل على مكافأة فور إكمال المهمة",
+    "INVITE_FRIENDS_REWARD": "ادعُ أصدقاءك واحصل على 10% من نشاطهم",
+    "INVITE_FRIENDS": "دعوة الأصدقاء",
+    "TASK_LIST": "قائمة المهام",
+    "TASK_IG": "تابعنا على إنستغرام",
+    "TASK_EMAIL": "التحقق من البريد الإلكتروني",
+    "TASK_GITHUB": "تابعنا على GitHub",
+    "INVITE_FRIENDS_COUNT": "دعوتَ {{usersCount}} صديقًا. وحصلت على {{userPoints}}."
+}

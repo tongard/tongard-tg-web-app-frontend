@@ -1,0 +1,68 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3  
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3  
+      with:
+        node-version: '20'  
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Angular app
+      run: npm run build
+
+    - name: List files in dist directory
+      run: ls -l dist/frontend-app/browser
+
+    - name: Copy build files and Dockerfile via SSH
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "dist/frontend-app/browser/*"
+        target: "~/angular-app/"
+
+    - name: Copy Dockerfile via SSH
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "Dockerfile"
+        target: "~/angular-app/"
+
+    - name: Copy nginx.conf via SSH
+      uses: appleboy/scp-action@v0.1.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "nginx.conf"
+        target: "~/angular-app/"
+
+    - name: Execute remote commands via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd ~/angular-app/
+          docker build -t angular-app .
+          docker stop angular-app-container || true
+          docker rm angular-app-container || true
+          docker run -d --name angular-app-container --network proxy-manager_default angular-app

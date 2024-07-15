@@ -1,0 +1,22 @@
+{
+    "GAMES": "jogos",
+    "FARMING": "agricultura",
+    "START_FARMING": "começar a cultivar",
+    "TASK_EMAIL_VERIFY": "verificar",
+    "TASK_EMAIL_CODE": "Enviaremos um código de 6 dígitos para este e-mail",
+    "TASK_SENT_CODE": "Código de verificação enviado para",
+    "TASK_SEND_CODE": "enviar código",
+    "TASK_CONGR_CODE": "Ótimo! Você recebeu 7777",
+    "NEXT": "Próximo",
+    "CLAIM": "reivindicar",
+    "START": "abrir",
+    "TASKS": "tarefas",
+    "TASK_REWARD": "Você receberá uma recompensa assim que completar a tarefa",
+    "INVITE_FRIENDS_REWARD": "Convide amigos e ganhe 10% de sua atividade",
+    "INVITE_FRIENDS": "convidar amigos",
+    "TASK_LIST": "lista de tarefas",
+    "TASK_IG": "Siga-nos no Instagram",
+    "TASK_EMAIL": "Verificar e-mail",
+    "TASK_GITHUB": "Siga no GitHub",
+    "INVITE_FRIENDS_COUNT": "Você convidou {{usersCount}} amigo(s). E recebeu {{userPoints}}."
+}

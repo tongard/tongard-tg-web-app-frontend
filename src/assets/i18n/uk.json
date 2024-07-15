@@ -1,0 +1,22 @@
+{
+    "GAMES": "ігри",
+    "FARMING": "фермерство",
+    "START_FARMING": "почати фермерство",
+    "TASK_EMAIL_VERIFY": "верифікувати",
+    "TASK_EMAIL_CODE": "Ми надішлемо 6-значний код на цей e-mail",
+    "TASK_SENT_CODE": "Код підтвердження надіслано на",
+    "TASK_SEND_CODE": "надіслати код",
+    "TASK_CONGR_CODE": "Чудово! Ви отримали 7777",
+    "NEXT": "Далі",
+    "CLAIM": "отримати",
+    "START": "відкрити",
+    "TASKS": "завдання",
+    "TASK_REWARD": "Ви отримаєте винагороду одразу після виконання завдання",
+    "INVITE_FRIENDS_REWARD": "Запросіть друзів та отримайте 10% від їх активності",
+    "INVITE_FRIENDS": "запросити друзів",
+    "TASK_LIST": "список завдань",
+    "TASK_IG": "Підпишіться на нас в Instagram",
+    "TASK_EMAIL": "Верифікувати e-mail",
+    "TASK_GITHUB": "Підписатися на GitHub",
+    "INVITE_FRIENDS_COUNT": "Ви запросили {{usersCount}} друга(ів). І отримали {{userPoints}}."
+}

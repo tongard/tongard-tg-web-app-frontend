@@ -1,0 +1,30 @@
+<tui-root>
+    <tui-loader [showLoader]="!(token && user)" [overlay]="true">
+        <div>
+            <div class="main-content content-info" *ngIf="token && user" [style.margin-bottom.px]="contentHeight">
+                <router-outlet />
+            </div>
+        </div>
+    </tui-loader>
+
+    <ng-template #tableBarTemplate let-close>
+        <div tuiMode="onDark" class="content">
+            <div class="button-container">
+                <div class="spacer"></div>
+                <button tuiIconButton [disabled]="currentRoute === '/'  || (currentRoute !== '/invite'  && currentRoute !== '/user-task' )? true : false" type="button"
+                    class="navigate-buttons" icon="tuiIconHomeLarge" (click)="navigateTo('/')"></button>
+                <div class="spacer"></div>
+                <button icon="tuiIconCheckLarge" tuiIconButton type="button" class=" navigate-buttons"
+                    [disabled]="currentRoute === '/user-task' ? true : false"
+                    (click)="navigateTo('/user-task')"></button>
+                <div class="spacer"></div>
+                <button icon="tuiIconUsersLarge" tuiIconButton type="button" class=" navigate-buttons"
+                    [disabled]="currentRoute === '/invite' ? true : false" [showLoader]="false"
+                    (click)="navigateTo('/invite')"></button>
+                <div class="spacer"></div>
+
+            </div>
+        </div>
+    </ng-template>
+    <tui-table-bars-host ngProjectAs="tuiOverContent" id="popup"></tui-table-bars-host>
+</tui-root>

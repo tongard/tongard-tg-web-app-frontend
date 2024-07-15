@@ -1,0 +1,10 @@
+<button tuiAction type="button" *ngIf="user">
+    <tui-avatar text="{{user.tgUser.last_name}} {{user.tgUser.first_name}}" class="custom tui-space_top-1"
+        tuiAvatarOutline="linear-gradient(#c86dd7, #3023ae)" [style.background]="'linear-gradient(#3023ae, #c86dd7)'"
+        [style.color]="'#fff'"></tui-avatar>
+    <section>
+        <h3 class="header tui-text_body-s">{{user.tgUser.last_name}} {{user.tgUser.first_name}} </h3>
+        <p class="description tui-text_body-xs">GTNM {{user.user.points}}</p>
+        <p *ngIf="globalService.getAdmin() === true"> <a tuiButton appearance="whiteblock-active" size="xs" (click)="navigateTo('/task')">Admin mode</a></p>
+    </section>
+</button>

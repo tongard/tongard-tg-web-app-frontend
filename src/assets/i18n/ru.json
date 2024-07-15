@@ -1,0 +1,22 @@
+{
+    "GAMES": "игры",
+    "FARMING": "фарминг",
+    "START_FARMING": "начать фарминг",
+    "TASK_EMAIL_VERIFY": "верифицировать",
+    "TASK_EMAIL_CODE": "На этот e-mail мы вышлем вам 6-ти значный код",
+    "TASK_SENT_CODE": "Проверочный код отправлен на",
+    "TASK_SEND_CODE": "отправить код",
+    "TASK_CONGR_CODE": "Отлично! Вы получили 7777",
+    "NEXT": "Далее",
+    "CLAIM": "забрать",
+    "START": "открыть",
+    "TASKS": "задания",
+    "TASK_REWARD": "Вы сразу получите вознаграждение как только выполните задание",
+    "INVITE_FRIENDS_REWARD": "Пригласите друзей и получите 10% от их активности",
+    "INVITE_FRIENDS": "пригласить друзей",
+    "TASK_LIST": "список заданий",
+    "TASK_IG": "Подпишись на нас в instagram",
+    "TASK_EMAIL": "Верифицируй e-mail",
+    "TASK_GITHUB": "Подпишись на github",
+    "INVITE_FRIENDS_COUNT":"Вы пригласили {{usersCount}} друга(ей). И получили {{userPoints}}."
+}

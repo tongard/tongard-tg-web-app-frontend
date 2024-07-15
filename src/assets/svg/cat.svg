@@ -1,0 +1,38 @@
+<svg
+    width="200"
+    height="200"
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    stroke="black"
+>
+    <!-- Головка -->
+    <circle cx="100" cy="100" r="80" fill="#FFD700" stroke="black" stroke-width="4"/>
+
+    <!-- Глазки -->
+    <circle cx="70" cy="80" r="10" fill="white"/>
+    <circle cx="130" cy="80" r="10" fill="white"/>
+    <circle cx="70" cy="80" r="5" fill="black"/>
+    <circle cx="130" cy="80" r="5" fill="black"/>
+
+    <!-- Носик -->
+    <polygon points="95,110 105,110 100,120" fill="pink" stroke="black" stroke-width="2"/>
+
+    <!-- Ротик -->
+    <path d="M90,130 Q100,140 110,130" stroke="black" stroke-width="2" fill="none"/>
+    <path d="M90,130 Q100,135 110,130" stroke="black" stroke-width="2" fill="none"/>
+
+    <!-- Ушки -->
+    <path d="M50,20 L70,60 L30,60 Z" fill="#FFD700" stroke="black" stroke-width="4"/>
+    <path d="M150,20 L170,60 L130,60 Z" fill="#FFD700" stroke="black" stroke-width="4"/>
+    <path d="M53,30 L63,55 L43,55 Z" fill="pink"/>
+    <path d="M153,30 L163,55 L143,55 Z" fill="pink"/>
+
+    <!-- Усики -->
+    <line x1="60" y1="100" x2="20" y2="100" stroke="black" stroke-width="2"/>
+    <line x1="60" y1="110" x2="20" y2="115" stroke="black" stroke-width="2"/>
+    <line x1="60" y1="120" x2="20" y2="130" stroke="black" stroke-width="2"/>
+    <line x1="140" y1="100" x2="180" y2="100" stroke="black" stroke-width="2"/>
+    <line x1="140" y1="110" x2="180" y2="115" stroke="black" stroke-width="2"/>
+    <line x1="140" y1="120" x2="180" y2="130" stroke="black" stroke-width="2"/>
+</svg>

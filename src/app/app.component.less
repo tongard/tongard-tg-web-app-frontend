@@ -1,0 +1,110 @@
+@import '@taiga-ui/core/styles/taiga-ui-local';
+
+.fixed {
+    position: fixed ;
+    bottom: 0;
+    width: 100%;
+}
+
+[data-appearance='custom'] {
+    color: var(--tui-text-01-night);
+    background-image: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+    font-weight: bold;
+}
+
+
+:host {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 3rem;
+    row-gap: 1.5rem;
+}
+ 
+[tuiAction] {
+    flex: 1;
+    justify-content: start;
+    align-items: center;
+}
+ 
+.no-shadow {
+    box-shadow: none;
+ 
+    &:hover {
+        box-shadow: none;
+    }
+}
+ 
+.header,
+.description {
+    margin: 0;
+    padding-left: 10px;
+}
+ 
+.header {
+    font-weight: bold;
+}
+ 
+.description {
+    color: var(--tui-text-02);
+}
+ 
+.positive {
+    color: var(--tui-positive);
+    background: var(--tui-success-bg);
+}
+ 
+.negative {
+    color: var(--tui-negative);
+    background: var(--tui-error-bg);
+}
+
+// .main-content{
+//     padding-bottom: 57px;
+// }
+
+.hide{
+    display:none;
+}
+
+
+.content-info {
+    overflow-y: auto;
+    // height: calc(100vh - 92px); /* Пример высоты, можно настроить */
+  }
+
+  .navigate-buttons, .navigate-buttons .t-wrapper{
+    background: var(--tg-theme-bg-color) !important; 
+    color: var(--tg-theme-button-text-color) !important;
+}
+body{
+    background: var(--tg-theme-bg-color) !important; 
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navigate-buttons {
+    flex: 0 0 auto;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.tui-island:not(.tui-island_hoverable):before {
+    border: 0px
+}
+
+.tui-island {
+    background: var(--tg-theme-bg-color) !important; 
+}

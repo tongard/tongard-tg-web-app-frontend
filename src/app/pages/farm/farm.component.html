@@ -1,0 +1,27 @@
+<tui-island size="l" textAlign="center">
+    <div class="tui-island__content">
+        <figure class="tui-island__figure">
+            <div class="some-figure"></div>
+        </figure>
+        <div>
+            <h3 *ngIf="user" class="tui-island__title">GTNM {{user.user.points}} </h3>
+            <p class="tui-island__paragraph">
+                <label *ngIf="value$ | async as value" tuiProgressLabel class="label-wrapper ">
+                    {{ value }}%
+                    <progress
+                        color="linear-gradient(to right, var(--tui-support-02), var(--tui-support-14), var(--tui-support-12))"
+                        [max]="max" new tuiProgressBar [value]="value" size="xxl"></progress>
+                </label>
+            </p>
+            <button
+                [disabled]="!((farm.getPoints === true && farm.isClaim === false) ||(farm.getPoints === false && farm.isClaim === true) || isLoader === true)"
+                (click)="action()" [showLoader]="isLoader"
+                [appearance]="farm.getPoints === true ? 'custom' : 'secondary-destructive'" tuiButton
+                class="tui-island__footer-button">
+
+                <span *ngIf="farm.getPoints === true">{{ 'CLAIM' | translate }}</span>
+                <span *ngIf="farm.getPoints !== true">{{ 'START_FARMING' | translate }}</span>
+            </button>
+        </div>
+    </div>
+</tui-island>

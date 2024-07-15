@@ -1,0 +1,22 @@
+{
+    "GAMES": "खेल",
+    "FARMING": "खेती",
+    "START_FARMING": "खेती शुरू करें",
+    "TASK_EMAIL_VERIFY": "सत्यापित करें",
+    "TASK_EMAIL_CODE": "हम इस ई-मेल पर 6 अंकों का कोड भेजेंगे",
+    "TASK_SENT_CODE": "पुष्टिकरण कोड भेजा गया",
+    "TASK_SEND_CODE": "कोड भेजें",
+    "TASK_CONGR_CODE": "बहुत बढ़िया! आपको 7777 प्राप्त हुए",
+    "NEXT": "आगे",
+    "CLAIM": "दावा करें",
+    "START": "खोलें",
+    "TASKS": "कार्य",
+    "TASK_REWARD": "जैसे ही आप कार्य पूरा करेंगे, आपको इनाम मिलेगा",
+    "INVITE_FRIENDS_REWARD": "मित्रों को आमंत्रित करें और उनकी गतिविधि का 10% प्राप्त करें",
+    "INVITE_FRIENDS": "मित्रों को आमंत्रित करें",
+    "TASK_LIST": "कार्य सूची",
+    "TASK_IG": "हमें Instagram पर फॉलो करें",
+    "TASK_EMAIL": "ई-मेल सत्यापित करें",
+    "TASK_GITHUB": "GitHub पर फॉलो करें",
+    "INVITE_FRIENDS_COUNT": "आपने {{usersCount}} मित्रों को आमंत्रित किया है। और {{userPoints}} प्राप्त किए।"
+}

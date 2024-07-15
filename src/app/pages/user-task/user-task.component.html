@@ -1,0 +1,133 @@
+<tui-island textAlign="center">
+    <div class="tui-island__content">
+        <figure class="tui-island__figure">
+            <div class="some-figure"></div>
+        </figure>
+        <div>
+            <h3 class="tui-island__title">{{'TASK_LIST' | translate}}</h3>
+
+
+            <tui-elastic-container class="b-form tui-space_top-4">
+                <!-- EMAIL start -->
+                <div class="wrapper content-size">
+                    <h6 class="title"  tuiCell tuiCell="s">
+                        <tui-svg  src="tuiIconMail" class="red"></tui-svg>
+
+                        <div tuiTitle>
+                            {{'TASK_EMAIL' | translate}}
+                            <div tuiSubtitle>7777 GTNM</div>
+                        </div>
+
+
+
+
+           
+
+                        <div class="remove">
+                            <button *ngIf="this.user.user.isVerify === false" appearance="custom"
+                                (click)="showDialog(template)" tuiButton size="s" class="remove">
+                                {{'TASK_EMAIL_VERIFY' | translate}}
+                            </button>
+                            <tui-badge *ngIf="this.user.user.isVerify === true" status="neutral"
+                                class="tui-space_right-2">
+                                <tui-svg src="tuiIconCheck"></tui-svg>
+                            </tui-badge>
+                        </div>
+
+
+                        <!-- [showLoader]="true" [disabled]="true" -->
+
+
+                    </h6>
+                </div>
+                <!-- EMAIL END -->
+
+
+
+                <div *ngFor="let item of tasks; let index = index" class="wrapper content-size">
+                    <div class="title" tuiCell tuiCell="s">
+                        <tui-svg *ngIf="item.icon != ''" src="{{item.icon}}" class="red"></tui-svg>
+
+                        <div tuiTitle>
+                            {{item.title | translate}}
+                            <div tuiSubtitle>{{item.points}} GTNM</div>
+                        </div>
+
+                        <div class="remove">
+                            <button
+                                *ngIf="(item.status.isStart === false && item.status.isClaimed === false) || (item.status.isStart === true && item.status.isClaimed === false && item.status.remainingTime > 0)"
+                                [showLoader]="item.status.remainingTime > 0" [disabled]="item.status.remainingTime > 0"
+                                appearance="custom" (click)="start(item.id, item)" tuiButton size="s" class="remove">
+                                {{'START' | translate}}
+                            </button>
+                            <button
+                                *ngIf="item.status.isStart === true && item.status.isClaimed === false && item.status.remainingTime === 0"
+                                [showLoader]="item.status.remainingTime > 0" [disabled]="item.status.remainingTime > 0"
+                                appearance="custom" (click)="claim(item.id)" tuiButton size="s" class="remove">
+
+                                {{'CLAIM' | translate}}
+                            </button>
+
+                            <tui-badge
+                                *ngIf="item.status.isStart === true && item.status.isClaimed === true && item.status.remainingTime === 0"
+                                status="neutral" class="tui-space_right-2">
+                                <tui-svg src="tuiIconCheck"></tui-svg>
+                            </tui-badge>
+                        </div>
+
+
+                        <!-- [showLoader]="true" [disabled]="true" -->
+
+
+                    </div>
+                </div>
+            </tui-elastic-container>
+        </div>
+    </div>
+</tui-island>
+
+
+
+<ng-template #template let-observer>
+    <div *ngIf="this.user.user.isVerify === false">
+        <p *ngIf="isCodeInput === false">{{"TASK_EMAIL_CODE" | translate}}</p>
+        <p *ngIf="isCodeInput === true">{{"TASK_SENT_CODE" | translate}} {{email}}</p>
+
+
+        <progress *ngIf="emailPending === true" max="100" tuiProgressBar></progress>
+        <form class="b-form" [formGroup]="form">
+            <div tuiGroup class="group">
+                <p>
+                    <tui-input *ngIf="isCodeInput === false" formControlName="email" [tuiTextfieldCleaner]="true"
+                        class="email-field">
+                        Type an email
+                        <span class="tui-required"></span>
+                        <input autocomplete="email" placeholder="mail@mail.ru" tuiTextfield type="email" />
+                    </tui-input>
+
+                    <tui-input *ngIf="isCodeInput === true" formControlName="code" style="max-width: 50%;">
+                        Type a code
+                    </tui-input>
+
+                </p>
+            </div>
+        </form>
+
+        <button *ngIf="isCodeInput === false" [disabled]="!form.get('email')?.valid" tuiButton type="button"
+            class="tui-space_top-4" (click)="sendEmail()">
+            {{"TASK_SEND_CODE" | translate}}
+        </button>
+
+        <button *ngIf="isCodeInput === true" [disabled]="!form.get('code')?.valid" tuiButton type="button"
+            class="tui-space_top-4" (click)="sendCode()">
+            
+            {{"NEXT" | translate}}
+        </button>
+    </div>
+    <div *ngIf="this.user.user.isVerify === true">
+        <h1>{{"TASK_CONGR_CODE" | translate }} GTNM</h1>
+        <button size="m" tuiButton type="button" (click)="observer.complete()">
+            {{"NEXT" | translate}}
+        </button>
+    </div>
+</ng-template>

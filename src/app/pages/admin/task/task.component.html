@@ -1,0 +1,65 @@
+<tui-island textAlign="center">
+    <div class="tui-island__content">
+        <figure class="tui-island__figure">
+            <div class="some-figure"></div>
+        </figure>
+        <div>
+            <h3 class="tui-island__title">Tasks List</h3>
+            <tui-elastic-container class="b-form tui-space_top-4">
+
+
+
+
+                <div *ngFor="let item of tasks; let index = index" class="wrapper">
+                    <h6 class="title">
+
+                        <tui-badge status="info" value="{{item.id}}"
+                            class="tui-space_right-2 tui-space_bottom-2"></tui-badge>
+                        <tui-badge status="info" value="{{item.url}}" class="tui-space_right-2 tui-space_bottom-2">
+
+                            <tui-svg src="tuiIconLink"></tui-svg>
+                        </tui-badge>
+                        <tui-badge status="success" value="{{item.points}}"
+                            class="tui-space_right-2 tui-space_bottom-2"><tui-svg
+                                src="tuiIconSmile"></tui-svg></tui-badge>
+
+                        <div class="remove" tuiButtonGroup tuiSurface="elevated">
+                            <button (click)="updateTask(item)" appearance="flat" shape="rounded" size="s" tuiIconButton
+                                [icon]="item.active === true ? 'tuiIconZap' : 'tuiIconZapOff'">
+                            </button>
+                        </div>
+                    </h6>
+                </div>
+            </tui-elastic-container>
+
+            <form class="b-form" [formGroup]="form">
+                <tui-input formControlName="title" tuiTextfieldSize="s" [tuiTextfieldCleaner]="true"
+                    class="tui-group__inherit-item">
+                    title
+                    <input #inputRef autocomplete="title" tuiTextfield type="text" />
+                </tui-input>
+                <div tuiGroup class="group">
+                    <tui-input formControlName="url" tuiTextfieldSize="s" [tuiTextfieldCleaner]="true"
+                        class="tui-group__inherit-item">
+                        Type url
+                        <input #inputRef autocomplete="please type url" tuiTextfield type="text" />
+                    </tui-input>
+                    <tui-input formControlName="icon" tuiTextfieldSize="s" [tuiTextfieldCleaner]="true"
+                        class="tui-group__inherit-item">
+                        Icon link
+                        <input #inputRef autocomplete="please type url" tuiTextfield type="text" />
+                    </tui-input>
+
+                    <tui-select tuiTextfieldSize="s" formControlName="points" class="points tui-group__auto-width-item">
+                        <input placeholder="Choose your hero" tuiTextfield />
+                        <tui-data-list-wrapper *tuiDataList [items]="points"></tui-data-list-wrapper>
+                    </tui-select>
+                </div>
+            </form>
+            <button (click)="addTask()" [showLoader]="false" appearance="custom" tuiButton
+                class="tui-island__footer-button">
+                add new task
+            </button>
+        </div>
+    </div>
+</tui-island>

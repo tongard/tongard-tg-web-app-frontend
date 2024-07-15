@@ -1,0 +1,12 @@
+<tui-block-status class="card" [card]="true">
+    <div tuiSlot="top" class="tui-avatar-stack reversed">
+        <tui-avatar *ngFor="let user of users" size="l" [autoColor]="true" [rounded]="true"
+            text="{{user.last_name}} {{user.first_name}}"></tui-avatar>
+    </div>
+    {{'INVITE_FRIENDS_REWARD' | translate}}
+    <p *ngIf="users && users.length >= 0"> {{ 'INVITE_FRIENDS_COUNT'| translate
+        :{usersCount:users.length,userPoints:users.length*300} }}</p>
+    <button appearance="primary" shape="rounded" size="s" tuiButton (click)="share()">
+        {{'INVITE_FRIENDS' | translate}}
+    </button>
+</tui-block-status>
