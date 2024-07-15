@@ -78,8 +78,7 @@
         "canvas-confetti": "^1.9.3",
         "jwt-decode": "^4.0.0",
         "@ngx-translate/http-loader": "8.0.0",
-        "@ngx-translate/core": "15.0.0",
-        "@taiga-ui/addon-table": "3.84.0"
+        "@ngx-translate/core": "15.0.0"
         
     }
 
