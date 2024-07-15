@@ -15,6 +15,7 @@ import { TUI_IS_MOBILE } from '@taiga-ui/cdk';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateConfigModule } from './translate-config.module';
+import { postEvent } from '@tma.js/sdk';
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -51,6 +52,7 @@ export class AppComponent {
     ngAfterViewInit() {
         if (this.isMobile === true) {
             this.scrollService.blockOverflow()
+            postEvent('web_app_expand');
         }
 
         this.subscription.unsubscribe();
