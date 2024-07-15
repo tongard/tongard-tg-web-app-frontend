@@ -65,4 +65,4 @@ jobs:
           docker build -t angular-app .
           docker stop angular-app-container || true
           docker rm angular-app-container || true
-          docker run -d --name angular-app-container --network proxy-manager_default angular-app
+          docker run -d --name angular-app-container --network proxymanager_default angular-app
