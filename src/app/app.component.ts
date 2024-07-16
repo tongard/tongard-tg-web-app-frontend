@@ -39,9 +39,9 @@ export class AppComponent {
     currentRoute: string = '/';
     user = null;
     private destroy$ = new Subject<void>();
+    isLoader:boolean = true;
 
-
-    contentHeight = '50px'; // Начальное значение
+    contentHeight = '50px'; 
 
     @ViewChild('tableBarTemplate')
     tableBarTemplate: PolymorpheusContent;
@@ -129,14 +129,15 @@ export class AppComponent {
                     this.cdRef.markForCheck()
                     this.cdRef.detectChanges()
                     this.navigateTo('/splash')
+                    this.subscription.unsubscribe();
+                    this.subscription = this.tableBarsService
+                        .open(this.tableBarTemplate || '', {
+                            adaptive: true,
+                        })
+                        .subscribe();
                     setTimeout(()=>{
-                        this.subscription.unsubscribe();
-                        this.subscription = this.tableBarsService
-                            .open(this.tableBarTemplate || '', {
-                                adaptive: true,
-                            })
-                            .subscribe();
-                    }, 2500)
+                            this.isLoader = false;
+                    }, 2850)
 
 
                     setTimeout(()=>{

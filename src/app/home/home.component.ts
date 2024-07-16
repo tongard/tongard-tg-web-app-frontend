@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ViewEncapsulation,
 } from '@angular/core';
@@ -33,4 +34,13 @@ import { TranslateConfigModule } from '../translate-config.module';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class HomeComponent { }
+export default class HomeComponent { 
+    constructor(
+        private cdRef: ChangeDetectorRef,
+    ) { }
+
+      ngAfterViewInit(){
+        this.cdRef.markForCheck()
+        this.cdRef.detectChanges()
+      }
+}

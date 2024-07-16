@@ -38,9 +38,9 @@ export default class SpalshComponent {
     ngOnInit(): void {
         setTimeout(() => {
             this.scrollService.makeConfetti({
-                particleCount: 40,
-                spread: 40,
-                origin: { y: 0.7 }
+                particleCount: 10,
+                spread: 100,
+                origin: { y: 1 }
               });
         }, 2850);
         setTimeout(() => {
