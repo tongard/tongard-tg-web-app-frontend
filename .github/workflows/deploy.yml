@@ -63,6 +63,6 @@ jobs:
         script: |
           cd ~/angular-app/
           docker build -t angular-app .
-          docker stop angular-app-container || true
-          docker rm angular-app-container || true
-          docker run -d --name angular-app-container --network proxymanager_default angular-app
+          docker stop mini_app_BE || true
+          docker rm mini_app_BE || true
+          docker run -d --name mini_app_BE --network proxymanager_default angular-app
