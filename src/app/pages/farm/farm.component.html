@@ -20,7 +20,8 @@
                 class="tui-island__footer-button">
 
                 <span *ngIf="farm.getPoints === true">{{ 'CLAIM' | translate }}</span>
-                <span *ngIf="farm.getPoints !== true">{{ 'START_FARMING' | translate }}</span>
+                <span *ngIf="farm.getPoints !== true && ((farm.getPoints === true && farm.isClaim === false) ||(farm.getPoints === false && farm.isClaim === true) || isLoader === true)">{{ 'START_FARMING' | translate }}</span>
+                <span *ngIf="!((farm.getPoints === true && farm.isClaim === false) ||(farm.getPoints === false && farm.isClaim === true) || isLoader === true)"></span>
             </button>
         </div>
     </div>
