@@ -136,7 +136,7 @@ export class AppComponent {
                                 adaptive: true,
                             })
                             .subscribe();
-                    }, 3001)
+                    }, 2500)
 
 
                     setTimeout(()=>{

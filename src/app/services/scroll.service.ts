@@ -16,13 +16,13 @@ export class ScrollControlService {
   }
 
 
-  makeConfetti(): void {
+  makeConfetti(paramsConfeti = {
+    particleCount: 110,
+    spread: 70,
+    origin: { y: 0.7 }
+  }): void {
     import('canvas-confetti').then(confetti => {
-      confetti.default({
-        particleCount: 110,
-        spread: 70,
-        origin: { y: 0.7 }
-      });
+      confetti.default(paramsConfeti);
     });
   }
 
