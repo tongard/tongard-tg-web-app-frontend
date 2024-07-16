@@ -1,9 +1,9 @@
 # Tongard - Telegram Mini App (FRONTEND) 🌟
 
 <p align="center">
-  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.03.png" alt="Nobe" width="180"/>
-  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.28.png" alt="Task List" width="180"/>
-  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.59.png" alt="Email Verification" width="180"/>
+  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.03.png" alt="Nobe" width="200"/>
+  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.28.png" alt="Task List" width="200"/>
+  <img src="./src/assets/img/botPreview/Screenshot%202024-07-14%20at%2020.00.59.png" alt="Email Verification" width="200"/>
 </p>
 
 ## What is Tongard? 🤔
