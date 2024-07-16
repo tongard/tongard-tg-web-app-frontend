@@ -1,10 +1,11 @@
 @import '@taiga-ui/core/styles/taiga-ui-local';
 .box {
-    overflow: auto;
-    // width:99%;
-    height: var(--tg-viewport-height, 100vh);
-    border: 1px solid var(--tui-base-09);
-    // padding: 0 0.6875rem;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: var(--tg-viewport-stable-height, 100vh);
+    transition: height .2s ease;
 }
 .fixed {
     position: fixed ;
