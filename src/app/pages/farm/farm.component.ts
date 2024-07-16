@@ -11,6 +11,7 @@ import { ScrollControlService } from '../../services/scroll.service';
 
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateConfigModule } from '../../translate-config.module';
+import { initHapticFeedback } from '@tma.js/sdk';
 
 @Component({
     standalone: true,
@@ -126,6 +127,8 @@ export default class FarmComponent {
                 takeUntil(this.destroy$)
             ).subscribe((user: any) => {
                 this.user = user;
+                const haptic = initHapticFeedback()
+                haptic.notificationOccurred('success');
                 this.scrollService.makeConfetti();
             });
             this.isLoader = false;

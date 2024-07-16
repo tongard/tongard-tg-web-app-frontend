@@ -58,12 +58,7 @@ export class AppComponent {
             haptic.notificationOccurred('success');
         }
 
-        this.subscription.unsubscribe();
-        this.subscription = this.tableBarsService
-            .open(this.tableBarTemplate || '', {
-                adaptive: true,
-            })
-            .subscribe();
+
 
         this.tableBarsService.bar$.subscribe(() => {
             setTimeout(() => {
@@ -125,13 +120,25 @@ export class AppComponent {
                 this.globalService.refreshUser().pipe(
                     takeUntil(this.destroy$)
                 ).subscribe(u => {
-                    this.user = u;
+                   
                     const lng = u.tgUser?.language_code ? u.tgUser?.language_code : browserLang.match(/en|ru/) ? browserLang : 'en';
 
                     globalService.setLng(lng)   
                     translate.use(globalService.getLng());
+                    this.user = u;
                     this.cdRef.markForCheck()
                     this.cdRef.detectChanges()
+                    this.navigateTo('/splash')
+                    setTimeout(()=>{
+                        this.subscription.unsubscribe();
+                        this.subscription = this.tableBarsService
+                            .open(this.tableBarTemplate || '', {
+                                adaptive: true,
+                            })
+                            .subscribe();
+                    }, 3001)
+
+
                     setTimeout(()=>{
                         this.scrollService.blockOverflow()
                     }, 250)
