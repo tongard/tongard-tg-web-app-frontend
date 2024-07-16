@@ -65,4 +65,4 @@ jobs:
           docker build -t angular-app .
           docker stop mini_app_FE || true
           docker rm mini_app_FE || true
-          docker run -d --name mini_app_FE --network proxymanager_default angular-app
+          docker run -d --name mini_app_FE --network proxymanager_default --log-driver=json-file --log-opt max-size=10m --log-opt max-file=5 angular-app
