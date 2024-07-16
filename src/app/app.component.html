@@ -3,15 +3,15 @@
     tuiOverscroll="all"
     class="box"
 >
-    <!-- <tui-loader [showLoader]="!(token && user)" [overlay]="true"> -->
-        <!-- <div>
-            <div class="main-content content-info" *ngIf="token && user" [style.margin-bottom.px]="contentHeight"> -->
+    <tui-loader [showLoader]="!(token && user)" [overlay]="true">
+        <div>
+            <div class="main-content content-info" *ngIf="token && user" [style.margin-bottom.px]="contentHeight">
                 <router-outlet />
-            <!-- </div>
-        </div> -->
-    <!-- </tui-loader> -->
+            </div>
+        </div>
+    </tui-loader>
 
-    <!-- <ng-template #tableBarTemplate let-close>
+    <ng-template #tableBarTemplate let-close>
         <div tuiMode="onDark" class="content">
             <div class="button-container">
                 <div class="spacer"></div>
@@ -30,6 +30,6 @@
             </div>
         </div>
     </ng-template>
-    <tui-table-bars-host ngProjectAs="tuiOverContent" id="popup"></tui-table-bars-host> -->
+    <tui-table-bars-host ngProjectAs="tuiOverContent" id="popup"></tui-table-bars-host>
     </div>
 </tui-root>
