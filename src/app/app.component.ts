@@ -50,8 +50,9 @@ export class AppComponent {
 
 
     ngAfterViewInit() {
+        
         if (this.isMobile === true) {
-            this.scrollService.blockOverflow()
+           // this.scrollService.blockOverflow()
             postEvent('web_app_expand');
             const haptic = initHapticFeedback()
             haptic.notificationOccurred('success');
