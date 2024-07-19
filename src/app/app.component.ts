@@ -16,6 +16,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateConfigModule } from './translate-config.module';
 import { postEvent, initHapticFeedback } from '@tma.js/sdk';
+import { SocketService } from './services/socket.service';
+import * as Sentry from "@sentry/angular";
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -90,6 +92,7 @@ export class AppComponent {
         this.router.navigate([path]);
     }
     constructor(
+        trace: Sentry.TraceService,
         public translate: TranslateService,
         private readonly tableBarsService: TuiTableBarsService,
         private renderer: Renderer2,
@@ -98,7 +101,8 @@ export class AppComponent {
         public globalService: GlobalService,
         private router: Router,
         private scrollService: ScrollControlService,
-        @Inject(TUI_IS_MOBILE) readonly isMobile: boolean
+        @Inject(TUI_IS_MOBILE) readonly isMobile: boolean,
+        private socketService: SocketService
     ) {
 
         translate.addLangs(['en', 'ru']);
@@ -117,6 +121,20 @@ export class AppComponent {
 
                 this.globalService.setAdmin(e.type === 'admin' ? true : false)
                 this.globalService.setToken(this.token)
+
+                this.socketService.connect(this.token);
+
+                this.subscription.add(
+                  this.socketService.onEvent('notify').subscribe(message => {
+                    console.log('Received notification:', message);
+                }))
+                setTimeout(()=>{
+                    console.log('sendMessage')
+                    this.socketService.sendMessage('sendMessage', { gameId: 123 }); 
+                },3000)
+               
+
+
                 this.globalService.refreshUser().pipe(
                     takeUntil(this.destroy$)
                 ).subscribe(u => {

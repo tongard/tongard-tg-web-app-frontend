@@ -5,7 +5,8 @@
 export const environment = {
     production: false,
     baseUrl: "https://exit.com",
-    appNameText: 'follow my updates here: https://github.com/tongard'
+    appNameText: 'follow my updates here: https://github.com/tongard',
+    traceURL: ''
 };
 
 /*
