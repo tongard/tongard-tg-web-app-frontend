@@ -3,5 +3,5 @@ export const environment = {
     baseUrl: "https://tongard.org",
     appNameText: 'follow my updates here: https://github.com/tongard',
     traceURL: "/^https:\/\/tongard\.org/",
-    sentryURL: "https://e01ec6f75193047d213e00feb18069cc@o4506215007518720.ingest.us.sentry.io/4507626432299008"
+    sentryURL: "http://a98d09684d05758703556a96bea6ff2f@sentry.tongard.org/2"
 };

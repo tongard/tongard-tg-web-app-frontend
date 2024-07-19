@@ -11,7 +11,7 @@
     "build": "ng build --configuration production",
     "lint": "eslint .",
     "prettier": "prettier !package-lock.json . --ignore-path .gitignore",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org home-tos --project fe-tongard ./dist/frontend-app && sentry-cli sourcemaps upload --org home-tos --project fe-tongard ./dist/frontend-app"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project fe-tongard ./dist/frontend-app && sentry-cli --url http://sentry.tongard.org/ sourcemaps upload --org sentry --project fe-tongard ./dist/frontend-app"
   },
   "browserslist": [
     "extends @taiga-ui/browserslist-config"
