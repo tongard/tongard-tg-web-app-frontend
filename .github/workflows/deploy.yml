@@ -26,6 +26,10 @@ jobs:
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
+    - name: Build Angular app
+      run: npm run build
+
+
     - name: Upload source maps to Sentry
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -34,12 +38,6 @@ jobs:
         npx sentry-cli releases new $RELEASE_VERSION
         npx sentry-cli releases files $RELEASE_VERSION upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
         npx sentry-cli releases finalize $RELEASE_VERSION
-
-    - name: Build Angular app
-      run: npm run build
-
-
-
 
     - name: List files in dist directory
       run: ls -l dist/frontend-app/browser
