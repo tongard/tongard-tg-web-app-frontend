@@ -1,2 +1,2 @@
-add sentry
+add sentry(self-host)
 add socket 
