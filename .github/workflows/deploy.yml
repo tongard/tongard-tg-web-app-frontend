@@ -23,6 +23,22 @@ jobs:
 
     - name: Build Angular app
       run: npm run build
+      
+    - name: Set release version
+      id: release
+      run: |
+        # Fetch all tags to ensure we can use git describe
+        git fetch --tags
+        # Set the release version based on the latest tag
+        echo "RELEASE_VERSION=$(git describe --tags)" >> $GITHUB_ENV
+
+    - name: Upload source maps to Sentry
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      run: |
+        npx sentry-cli releases new ${{ env.RELEASE_VERSION }}
+        npx sentry-cli releases files ${{ env.RELEASE_VERSION }} upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
+        npx sentry-cli releases finalize ${{ env.RELEASE_VERSION }}
 
     - name: List files in dist directory
       run: ls -l dist/frontend-app/browser
