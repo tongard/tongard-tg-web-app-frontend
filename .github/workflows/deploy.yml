@@ -21,10 +21,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: set env sentry
-      env:
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-
     - name: Print SENTRY_AUTH_TOKEN
       run: echo $SENTRY_AUTH_TOKEN
       env:
@@ -38,10 +34,6 @@ jobs:
         # Set the release version based on the latest tag
         echo "RELEASE_VERSION=$(git describe --tags)" >> $GITHUB_ENV
 
-    - name: Build Angular app
-      run: npm run build
-
-
     - name: Upload source maps to Sentry
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -49,6 +41,12 @@ jobs:
         npx sentry-cli releases new ${{ env.RELEASE_VERSION }}
         npx sentry-cli releases files ${{ env.RELEASE_VERSION }} upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
         npx sentry-cli releases finalize ${{ env.RELEASE_VERSION }}
+
+    - name: Build Angular app
+      run: npm run build
+
+
+
 
     - name: List files in dist directory
       run: ls -l dist/frontend-app/browser
