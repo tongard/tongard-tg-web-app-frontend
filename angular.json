@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "sourceMap": true,
             "outputPath": "./dist/frontend-app",
             "index": "src/index.html",
             "browser": "src/main.ts",

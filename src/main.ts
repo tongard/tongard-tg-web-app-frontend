@@ -7,9 +7,9 @@ import {environment} from './environments/environment';
 import * as Sentry from "@sentry/angular";
 
 if (environment.production) {
-    enableProdMode();
+    
     Sentry.init({
-        dsn: "https://e01ec6f75193047d213e00feb18069cc@o4506215007518720.ingest.us.sentry.io/4507626432299008",
+        dsn: environment.sentryURL,
         integrations: [
           // Registers and configures the Tracing integration,
           // which automatically instruments your application to monitor its
@@ -33,6 +33,7 @@ if (environment.production) {
         replaysSessionSampleRate: 0.1,
         replaysOnErrorSampleRate: 1.0,
       });
+      enableProdMode();
 }
 
 

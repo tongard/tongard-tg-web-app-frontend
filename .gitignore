@@ -45,3 +45,5 @@ Thumbs.db
 .turbo
 .pnp
 .pnp.js
+# Sentry Config File
+.sentryclirc
