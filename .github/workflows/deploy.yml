@@ -21,15 +21,15 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build Angular app
-      run: npm run build
+    - name: set env sentry
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
     - name: Print SENTRY_AUTH_TOKEN
       run: echo $SENTRY_AUTH_TOKEN
       env:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      
     - name: Set release version
       id: release
       run: |
@@ -37,6 +37,10 @@ jobs:
         git fetch --tags
         # Set the release version based on the latest tag
         echo "RELEASE_VERSION=$(git describe --tags)" >> $GITHUB_ENV
+
+    - name: Build Angular app
+      run: npm run build
+
 
     - name: Upload source maps to Sentry
       env:
