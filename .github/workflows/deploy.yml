@@ -23,6 +23,12 @@ jobs:
 
     - name: Build Angular app
       run: npm run build
+
+    - name: Print SENTRY_AUTH_TOKEN
+      run: echo $SENTRY_AUTH_TOKEN
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       
     - name: Set release version
       id: release
