@@ -36,7 +36,7 @@ jobs:
         RELEASE_VERSION: ${{ secrets.RELEASE_VERSION }}
       run: |
         export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        ORGANIZATION=sentry
+        ORGANIZATION=home-tos
         PROJECT=fe-tongard
         npx sentry-cli releases --org $ORGANIZATION --project $PROJECT new $RELEASE_VERSION
         npx sentry-cli releases --org $ORGANIZATION --project $PROJECT files $RELEASE_VERSION upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
