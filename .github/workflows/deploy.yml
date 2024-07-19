@@ -35,6 +35,7 @@ jobs:
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         RELEASE_VERSION: ${{ secrets.RELEASE_VERSION }}
       run: |
+        sentry-cli --auth-token=${{ secrets.SENTRY_AUTH_TOKEN }}
         sentry-cli releases new $RELEASE_VERSION
         sentry-cli releases files $RELEASE_VERSION upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
         sentry-cli releases finalize $RELEASE_VERSION
