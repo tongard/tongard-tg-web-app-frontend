@@ -30,15 +30,15 @@ jobs:
       run: npm run build
 
 
-    - name: Upload source maps to Sentry
-      env:
-        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        RELEASE_VERSION: ${{ secrets.RELEASE_VERSION }}
-      run: |
-        export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-        sentry-cli releases new $RELEASE_VERSION
-        sentry-cli releases files $RELEASE_VERSION upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
-        sentry-cli releases finalize $RELEASE_VERSION
+    # - name: Upload source maps to Sentry
+    #   env:
+    #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+    #     RELEASE_VERSION: ${{ secrets.RELEASE_VERSION }}
+    #   run: |
+    #     export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+    #     sentry-cli releases new $RELEASE_VERSION
+    #     sentry-cli releases files $RELEASE_VERSION upload-sourcemaps ./dist/frontend-app --url-prefix '~/'
+    #     sentry-cli releases finalize $RELEASE_VERSION
 
 
     - name: List files in dist directory
