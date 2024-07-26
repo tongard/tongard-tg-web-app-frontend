@@ -144,6 +144,48 @@ export class GameComponent implements OnInit, OnDestroy {
         this.subscription = this.keyboardService.subscribe((command) => {
             this.socket.emit('move-player', command)
           });
+
+
+
+          document.addEventListener('swiped', (e:any)=>{
+ 
+          })
+
+        document.addEventListener('swiped-left', (e:any)=>{
+ 
+            this.socket.emit('move-player', {
+              type: 'move-player',
+              playerId: this.playerId,
+              keyPressed: 'ArrowLeft'
+            })
+        })
+
+        document.addEventListener('swiped-right', (e:any)=>{
+ 
+            this.socket.emit('move-player', {
+              type: 'move-player',
+              playerId: this.playerId,
+              keyPressed: 'ArrowRight'
+            })
+        })
+
+        document.addEventListener('swiped-up', (e:any)=>{
+ 
+            this.socket.emit('move-player', {
+              type: 'move-player',
+              playerId: this.playerId,
+              keyPressed: 'ArrowUp'
+            })
+        })
+
+        document.addEventListener('swiped-down', (e:any)=>{
+ 
+            this.socket.emit('move-player', {
+              type: 'move-player',
+              playerId: this.playerId,
+              keyPressed: 'ArrowDown'
+            })
+        })
     }
 
     private setupScreen(): void {
