@@ -1,4 +1,4 @@
-<!-- <div class="container">
+<div class="container">
     <div class="top-block">
         <table #scoreTable>
             <tr class="header">
@@ -6,38 +6,24 @@
                 <td>Points</td>
                 <td>Online</td>
             </tr>
-            <tr *ngFor="let player of playersArray" [ngClass]="{ 'current-player': player.playerId === playerId }">
+            <tr *ngFor="let player of playersArray"
+                [ngClass]="{ 'current-player': player.playerId === playerId }">
                 <td>{{ player.name }}</td>
                 <td>{{ player.score }}</td>
                 <td>{{ player.disconnected }} {{ player.disconnectTime }} {{ player.disconnectDuration }}</td>
             </tr>
         </table>
     </div>
-    <div class="bottom-block">
-
-        
-
-    </div>
-</div> -->
-<img style="display:none;" #potionsImg src="./assets/img/tmp4.png" />
-<div tuiCardLarge tuiSurface="elevated">
-    <header tuiHeader>
-        <h1 tuiTitle>
-            Title
-            <span tuiSubtitle>Subtitle</span>
-        </h1>
-    </header>
-
-    <section>
-        <div *tuiRepeatTimes="let index of 1" tuiCardMedium tuiSurface="flat">
-            <canvas id="screen" #screen></canvas>
-        </div>
-    </section>
-
-    <footer>
-        <button appearance="secondary" size="m" tuiButton type="button">
-            Label
-        </button>
-    </footer>
+     <div class="bottom-block">
+        <!-- <div class="wrapper"> --> 
+        <!-- <tui-push
+        heading="Roy"
+        type="Replicant"
+     
+    > -->
+        <canvas id="screen" #screen></canvas>
+    <!-- </tui-push> -->
+ <!-- </div> -->
+    </div> 
 </div>
-
+<img style="display:none;" #potionsImg src="./assets/img/tmp4.png" />
