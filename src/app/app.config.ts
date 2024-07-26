@@ -17,8 +17,9 @@ import { TAIGA_MODULES } from './taiga-all-modules/taiga.module';
 import { environment } from '../environments/environment';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import * as Sentry from "@sentry/angular";
+import { CustomSocketService } from './custom.socket.service';
 
-const config: SocketIoConfig = { url: environment.baseUrl, options: {} };
+// const config: SocketIoConfig = { url: environment.baseUrl, options: {} };
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -50,7 +51,8 @@ export const appConfig: ApplicationConfig = {
             TuiRootModule,
             TAIGA_MODULES,
             HttpClientModule,
-            SocketIoModule.forRoot(config)
+            CustomSocketService
+            // SocketIoModule.forRoot(config)
         ),
         {
             provide: TUI_SANITIZER,

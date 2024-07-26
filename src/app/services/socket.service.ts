@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SocketService {
+
+  
   constructor(private socket: Socket) {
     socket.onAny((e=>{
         console.log('any: ', e)
@@ -24,8 +26,11 @@ export class SocketService {
 
   // Пример метода для подключения к серверу
   connect(token: string) {
-    this.socket.ioSocket.io.opts.query = { token };
-    this.socket.connect();
+    if(token){
+      this.socket.ioSocket.io.opts.query = { token };
+      this.socket.connect();
+    }
+ 
   }
 
   // Пример метода для отключения от сервера

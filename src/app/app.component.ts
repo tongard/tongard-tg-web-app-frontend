@@ -1,9 +1,9 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 
-import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { catchError, Observable, retryWhen, Subject, Subscription, switchMap, takeUntil, throwError, timer } from 'rxjs';
 import { environment } from '../environments/environment';
 import { CommonModule } from '@angular/common';
 import { GlobalService } from './services/global.serice';
@@ -16,8 +16,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateConfigModule } from './translate-config.module';
 import { postEvent, initHapticFeedback } from '@tma.js/sdk';
-import { SocketService } from './services/socket.service';
+// import { SocketService } from './services/socket.service';
 import * as Sentry from "@sentry/angular";
+import { TokenService } from './token.service';
+import { CustomSocketService } from './custom.socket.service';
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -41,6 +43,7 @@ export class AppComponent {
     currentRoute: string = '/';
     user = null;
     private destroy$ = new Subject<void>();
+    private destroyTableBar$ = new Subject<void>();
     isLoader:boolean = true;
 
     contentHeight = '50px'; 
@@ -77,6 +80,11 @@ export class AppComponent {
         this.cdRef.markForCheck()
     }
 
+    destroy() {
+        this.destroyTableBar$.next();
+    }
+    
+
     ngOnInit(): void {
         this.router.events.pipe(
             takeUntil(this.destroy$)
@@ -88,8 +96,11 @@ export class AppComponent {
         });
     }
 
-    navigateTo(path: string) {
+    navigateTo(path: string, isDestroyMenu = false) {
         this.router.navigate([path]);
+        if(isDestroyMenu === true){
+            this.destroy()
+        }
     }
     constructor(
         trace: Sentry.TraceService,
@@ -102,7 +113,9 @@ export class AppComponent {
         private router: Router,
         private scrollService: ScrollControlService,
         @Inject(TUI_IS_MOBILE) readonly isMobile: boolean,
-        private socketService: SocketService
+        
+        private socketService: CustomSocketService
+
     ) {
 
         translate.addLangs(['en', 'ru']);
@@ -121,17 +134,21 @@ export class AppComponent {
 
                 this.globalService.setAdmin(e.type === 'admin' ? true : false)
                 this.globalService.setToken(this.token)
+                
 
-                this.socketService.connect(this.token);
+                this.socketService.on('start').subscribe((data) => {
+                    console.log('Received data:', data);
+                  });
+                // this.socketService.connect(this.token);
 
-                this.subscription.add(
-                  this.socketService.onEvent('notify').subscribe(message => {
-                    console.log('Received notification:', message);
-                }))
-                setTimeout(()=>{
-                    console.log('sendMessage')
-                    this.socketService.sendMessage('sendMessage', { gameId: 123 }); 
-                },3000)
+                // this.subscription.add(
+                //   this.socketService.onEvent('notify').subscribe(message => {
+                //     console.log('Received notification:', message);
+                // }))
+                // setInterval(()=>{
+                //     console.log('sendMessage')
+                //     this.socketService.emit('sendMessage', { gameId: 123 }); 
+                // },3000)
                
 
 
@@ -151,10 +168,12 @@ export class AppComponent {
                     this.subscription = this.tableBarsService
                         .open(this.tableBarTemplate || '', {
                             adaptive: true,
-                        })
+                        }).pipe(takeUntil(this.destroyTableBar$))
                         .subscribe();
+                      
                     setTimeout(()=>{
                             this.isLoader = false;
+                            
                     }, 2850)
 
 
@@ -170,13 +189,36 @@ export class AppComponent {
     }
 
     login(): Observable<any> {
-        return this.http.post(`${environment.baseUrl}/api/auth/login`, {});
+        return this.http.post(`${environment.baseUrl}/api/auth/login`, {}).pipe(
+            retryWhen(errors =>
+              errors.pipe(
+                switchMap((error, index) => {
+                  if (index < 3 && this.shouldRetry(error)) {
+                    return timer(3000);
+                  }
+                  return throwError(error);
+                })
+              )
+            ),
+            catchError(this.handleError)
+          );
     }
 
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }
+
+    private shouldRetry(error: HttpErrorResponse): boolean {
+        // Retry only for 502 errors
+        return error.status === 502;
+      }
+    
+      private handleError(error: HttpErrorResponse) {
+        console.error('An error occurred:', error.message);
+        // You can return a user-friendly error message here
+        return throwError('Something went wrong; please try again later.');
+      }
 
 
 }

@@ -12,7 +12,7 @@
     </tui-loader>
 
     <ng-template #tableBarTemplate let-close>
-        <div tuiMode="onDark" class="content">
+        <div tuiMode="onDark" class="content" >
             <div class="button-container" *ngIf="isLoader === false">
                 <div class="spacer"></div>
                 <button 
@@ -34,6 +34,10 @@
                     [disabled]="currentRoute === '/invite' ? true : false" 
                     (click)="navigateTo('/invite')" ></button>
                 <div class="spacer"></div>
+                <button icon="tuiIconUsersLarge" tuiIconButton type="button" class=" navigate-buttons"
+                [disabled]="currentRoute === '/invite' ? true : false" 
+                (click)="navigateTo('/user-game', true)" ></button>
+            <div class="spacer"></div>
 
             </div>
         </div>

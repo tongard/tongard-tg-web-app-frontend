@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import FarmComponent from '../pages/farm/farm.component';
 import UserComponent from '../pages/user/user.component';
 import { TranslateConfigModule } from '../translate-config.module';
+import { GameComponent } from '../pages/game/game.component';
 
 @Component({
     standalone: true,
@@ -27,7 +28,8 @@ import { TranslateConfigModule } from '../translate-config.module';
         HttpClientModule,
         FarmComponent,
         UserComponent,
-        TranslateConfigModule
+        TranslateConfigModule,
+        GameComponent
     ],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.less'],
@@ -35,9 +37,16 @@ import { TranslateConfigModule } from '../translate-config.module';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class HomeComponent { 
+    ready = false;
     constructor(
         private cdRef: ChangeDetectorRef,
-    ) { }
+    ) { 
+        setTimeout(()=>{
+            this.ready = true;
+            this.cdRef.markForCheck()
+            this.cdRef.detectChanges()
+        }, 3500)
+    }
 
       ngAfterViewInit(){
         this.cdRef.markForCheck()

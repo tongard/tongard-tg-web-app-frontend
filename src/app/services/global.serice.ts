@@ -8,11 +8,13 @@ import { BehaviorSubject, Observable, take, tap } from 'rxjs';
 export class GlobalService {
   private token: any = null;
   private isAdmin: boolean = false;
+  userState:any;
   private userSubject = new BehaviorSubject<any>(null);
   user$: Observable<any> = this.userSubject.asObservable();
   private lng: string = 'en';
   constructor(private userService: UserService) {
     this.token = {};
+
 
   }
 
@@ -53,6 +55,7 @@ export class GlobalService {
     return this.userService.getMe().pipe(
       tap((user: any) => {
         this.setUser(user);
+        this.userState = user;
       }),
       take(1)
     );
