@@ -45,7 +45,7 @@ export default class SpalshComponent {
         }, 2850);
         setTimeout(() => {
             this.router.navigate(['/']);
-        }, 3000);
+        }, 2850);
       }
 
       ngAfterViewInit(){

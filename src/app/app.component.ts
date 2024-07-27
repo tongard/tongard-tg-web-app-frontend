@@ -165,14 +165,15 @@ export class AppComponent {
                     this.cdRef.detectChanges()
                     this.navigateTo('/splash')
                     this.subscription.unsubscribe();
-                    this.subscription = this.tableBarsService
-                        .open(this.tableBarTemplate || '', {
-                            adaptive: true,
-                        }).pipe(takeUntil(this.destroyTableBar$))
-                        .subscribe();
+           
                       
                     setTimeout(()=>{
                             this.isLoader = false;
+                            this.subscription = this.tableBarsService
+                            .open(this.tableBarTemplate || '', {
+                                adaptive: true,
+                            }).pipe(takeUntil(this.destroyTableBar$))
+                            .subscribe();
                             
                     }, 2850)
 
