@@ -10,7 +10,7 @@ import { TAIGA_MODULES } from '../../taiga-all-modules/taiga.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Player } from './interfaces';
-
+import { initHapticFeedback } from '@tma.js/sdk';
 
 
 @Component({
@@ -82,6 +82,12 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     private setupSocketListeners(): void {
+
+
+        
+        this.socket.on('update-state').subscribe(state => {
+            this.gameService.setState(state);
+        })
         this.socket.on('connect').subscribe(e => {
             console.log('connectos')
             this.setupScreen();
@@ -131,7 +137,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
                 //only play sound for those users
                 if (command.playersId && command.playersId.indexOf(this.playerId) > -1)
+                {
                     this.playAudio(command)
+                    const haptic = initHapticFeedback()
+                    haptic.impactOccurred('soft');
+                }
                 else if (command.playersId && command.playersId.length === 0) {
                     this.playAudio(command)
                 }
@@ -188,6 +198,9 @@ export class GameComponent implements OnInit, OnDestroy {
         })
     }
 
+    showLog(){
+        this.gameService.getLogger()
+    }
     private setupScreen(): void {
         const canvas = this.screenElement.nativeElement;
         const context = canvas.getContext('2d');

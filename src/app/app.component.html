@@ -35,7 +35,7 @@
                     (click)="navigateTo('/invite')" ></button>
                 <div class="spacer"></div>
                 <button icon="tuiIconSmileLarge" tuiIconButton type="button" class=" navigate-buttons"
-                [disabled]="true" 
+                [disabled]="currentRoute === '/invite' ? true : false" 
                 (click)="navigateTo('/user-game', true)" ></button>
             <div class="spacer"></div>
 

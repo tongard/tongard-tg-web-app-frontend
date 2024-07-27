@@ -86,7 +86,7 @@ export class GameServiceBase {
         setInterval(() => 
         {
             let countFruits = Object.keys(this.state.fruits).length
-            if(countFruits <= 90)
+            if(countFruits <= 30)
                 this.addFruit()
         }
         , frequency);
@@ -358,6 +358,6 @@ export class GameServiceBase {
 
     private logState() {
         if(this.logger !== null)
-            this.logger.log(`> Current state: ${this.safeStringify(this.state)}`); // Используйте this.logger
-    }
+            this.logger.log({current_state: this.state});
+    } 
 }
