@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectorRef, Inject } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Subscription } from 'rxjs';
+
 import { CustomSocketService } from '../../custom.socket.service';
 import { TokenService } from '../../token.service';
 import { GlobalService } from '../../services/global.serice';
@@ -11,7 +11,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Player } from './interfaces';
 import { initHapticFeedback } from '@tma.js/sdk';
+import { TuiDialogService } from '@taiga-ui/core';
+import { Router } from '@angular/router';
 
+
+import {ChangeDetectionStrategy,  TemplateRef} from '@angular/core';
+import {tuiClamp, TuiDropdownPortalService} from '@taiga-ui/cdk';
+import {PolymorpheusContent} from '@tinkoff/ng-polymorpheus';
 
 @Component({
     standalone: true,
@@ -28,11 +34,16 @@ export class GameComponent implements OnInit, OnDestroy {
 
     public playerId: string;
     playersArray: Player[] = [];
-    private subscription: any;
+    score = 0;
+
+    filters = false;
+    scale = 1;
+
 
     @ViewChild('screen') screenElement!: ElementRef<HTMLCanvasElement>;
     @ViewChild('scoreTable') scoreTableElement!: ElementRef<HTMLTableElement>;
     @ViewChild('potionsImg') potionsImgElement!: ElementRef<HTMLImageElement>;
+    @ViewChild('long') long!: ElementRef;
 
     audios: any = {
         playerCollision: new Audio("./assets/sounds/bubble_hit.mp3"),
@@ -43,6 +54,10 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     constructor(
+        @Inject(TuiDropdownPortalService)
+        private readonly portalService: TuiDropdownPortalService,
+        private router: Router,
+        @Inject(TuiDialogService) private readonly dialogs: TuiDialogService,
         private keyboardService: KeyboardService,
         private socket: CustomSocketService, 
         private cdRef: ChangeDetectorRef, 
@@ -64,9 +79,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.keyboardService.unsubscribeAll();
-        if (this.subscription) {
-          this.subscription.unsubscribe();
+ 
+        if (this.socket) {
+            this.socket.disconnect();
         }
+        
     }
 
     private getInitials(str:string) {
@@ -85,6 +102,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
 
         
+        this.socket.on('player-timeout').subscribe(info => {
+    
+            this.score = info.score;
+            this.showDialog(this.long)
+        })
         this.socket.on('update-state').subscribe(state => {
             this.gameService.setState(state);
         })
@@ -150,10 +172,26 @@ export class GameComponent implements OnInit, OnDestroy {
         })
     }
 
+    showDialogWithCustomButton(): void {
+        this.dialogs
+            .open(`
+               1) Use swipe: up, down, left, right to move your hero.<br>
+               2) Your task is to collect as many trophies as possible.<br>
+               3) You can knock trophies out of another hero and take them
+                `, {
+                label: 'Istruction',
+                size: 's',
+                data: {button: 'Do it!'},
+            })
+            .subscribe();
+    }
+
     ngAfterViewInit(){
-        this.subscription = this.keyboardService.subscribe((command) => {
-            this.socket.emit('move-player', command)
-          });
+
+        this.showDialogWithCustomButton()
+        this.keyboardService.subscribe((command) => {
+             this.socket.emit('move-player', command)
+        });
 
 
 
@@ -209,6 +247,10 @@ export class GameComponent implements OnInit, OnDestroy {
         const { width, height, pixelsPerFields } = this.gameService.state.screen;
         canvas.width = width * pixelsPerFields;
         canvas.height = height * pixelsPerFields;
+    }
+
+    navigateTo(path: string, isDestroyMenu = false) {
+        this.router.navigate([path]);
     }
 
     private renderScreen(): void {
@@ -305,54 +347,7 @@ export class GameComponent implements OnInit, OnDestroy {
         }
     }
 
-    // private updateScoreTable(scoreTable: HTMLTableElement): void {
-    //     const maxResults = 10;
-    //     let scoreTableInnerHTML = `
-    //   <tr class="header">
-    //     <td>Top 10 Players</td>
-    //     <td>Points</td>
-    //     <td>Online</td>
-    //   </tr>
-    // `;
-
-    //     const playersArray = Object.values(this.gameService.state.players).map(player => ({
-    //         playerId: player.playerId,
-    //         x: player.x,
-    //         y: player.y,
-    //         score: player.score,
-    //         disconnectTime: player.disconnectTime,
-    //         disconnectTimeout: player.disconnectTimeout,
-    //         disconnectDuration: player.disconnectDuration,
-    //         disconnected: player.disconnected
-    //     }));
-
-    //     const playersSortedByScore = playersArray.sort((first, second) => second.score - first.score);
-    //     const topScorePlayers = playersSortedByScore.slice(0, maxResults);
-
-    //     scoreTableInnerHTML = topScorePlayers.reduce((stringFormed, player) => stringFormed + `
-    //   <tr class="${player.playerId === this.playerId ? 'current-player' : ''}">
-    //     <td>${player.playerId}</td>
-    //     <td>${player.score}</td>
-    //     <td>${player.disconnected} ${player.disconnectTime} ${player.disconnectDuration}</td>
-    //   </tr>
-    // `, scoreTableInnerHTML);
-
-    //     if (!topScorePlayers.some(player => player.playerId === this.playerId)) {
-    //         const currentPlayerFromTopScore = this.gameService.state.players[this.playerId || ''];
-
-    //         if (currentPlayerFromTopScore) {
-    //             scoreTableInnerHTML += `
-    //       <tr class="current-player">
-    //         <td>${this.playerId}</td>
-    //         <td>${currentPlayerFromTopScore.score}</td>
-    //       </tr>
-    //     `;
-    //         }
-    //     }
-
-    //     scoreTable.innerHTML = scoreTableInnerHTML;
-    // }
-
+   
     private getColorFromScore(score: number): string {
         score *= 10;
         const red = Math.min(score, 240);
@@ -371,6 +366,38 @@ export class GameComponent implements OnInit, OnDestroy {
         // Handle playing audio
         this.audios[command.audio].cloneNode(true).play().catch((error: any) => {
             console.error('Error playing audio:', error);
+        });
+    }
+
+
+
+
+    // mobile dialog
+    get transform(): string {
+        return `scale(${this.scale})`;
+    }
+ 
+    get width(): string {
+        return `calc((100% + 4rem) * ${1 / this.scale})`;
+    }
+ 
+    onElastic(value: number): void {
+        this.scale = tuiClamp(value, 0.5, 1);
+    }
+ 
+
+ 
+    showDialog(
+        content: PolymorpheusContent,
+        // button: TemplateRef<Record<string, unknown>>,
+    ): void {
+        // const templateRef = this.portalService.addTemplate(button);
+ 
+        this.dialogs.open(content).subscribe({
+            complete: () => {
+                this.navigateTo('/')
+            },
+
         });
     }
 }

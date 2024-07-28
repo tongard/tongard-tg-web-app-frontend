@@ -1,6 +1,8 @@
 // shared/game.service.shared.ts
+import { Subject } from 'rxjs';
 
 export const mod = (x: number, y: number): number => ((y % x) + x) % x;
+
 
 export interface State {
     players: Record<string, Player>;
@@ -17,6 +19,7 @@ export interface State {
         initialScore: number;
         autoDropFruitValue: number;
         showPotsValue: boolean;
+        playerTimeLimit:number;
     };
 }
 
@@ -31,6 +34,8 @@ export interface Player {
     disconnected: boolean;
     disconnectDuration: number | null;
     disconnectTime: any;
+    connectTime: number; // Время подключения
+    timeLeft: number; // Оставшееся время в миллисекундах
 }
 
 export interface Fruit {
@@ -61,10 +66,15 @@ export class GameServiceBase {
             initialScore: 500,
             autoDropFruitValue: 1,
             showPotsValue: false,
+            playerTimeLimit: 60000
         }
     };
 
     private observers: Array<(command: any) => void> = [];
+
+    private playerTimers: Record<string, number> = {}; 
+    private globalTimer: any = null;
+    public gameFinishSubject: Subject<{ playerId: string, score: number }> = new Subject();
 
     setServer(server: any){
         if(this.serverSock === null){
@@ -76,21 +86,76 @@ export class GameServiceBase {
         }
     }
 
+    getServer(){
+        return this.serverSock;
+    }
+
     constructor(isStart:boolean = false) {
         if(isStart === true)
             this.start();
+
+        
+    }
+
+    private startGlobalTimer() {
+        if (this.globalTimer) {
+            clearInterval(this.globalTimer);
+        }
+
+        this.globalTimer = setInterval(() => {
+            const now = Date.now();
+            const expiredPlayers: string[] = [];
+
+            for (const playerId in this.state.players) {
+                const player = this.state.players[playerId];
+                if (player.isConnected) {
+                    const timeElapsed = now - player.connectTime;
+                    const remainingTime = this.state.config.playerTimeLimit - timeElapsed;
+                    
+                    if (remainingTime <= 0) {
+                        expiredPlayers.push(playerId);
+                    } else {
+                        this.playerTimers[playerId] = remainingTime;
+                    }
+                }
+            }
+
+            for (const playerId of expiredPlayers) {
+                this.notifyAll({
+                    type: 'player-timeout',
+                    playerId,
+                    score: this.state.players[playerId].score
+                });
+                this.finishGame(playerId);
+            }
+        }, 1000); // Проверяем каждую секунду
     }
 
     private start() {
-        const frequency = 5000;
+        const frequency = 50000;
         setInterval(() => 
         {
             let countFruits = Object.keys(this.state.fruits).length
-            if(countFruits <= 30)
+            if(countFruits <= 2)
                 this.addFruit()
         }
         , frequency);
+
+        this.startGlobalTimer();
         
+    }
+
+    private finishGame(playerId: string) {
+        const player = this.state.players[playerId];
+        if (player) {
+            this.removePlayer({ playerId });
+
+            // Уведомление о завершении игры
+            this.gameFinishSubject.next({
+                playerId,
+                score: player.score
+            });
+        }
     }
 
     public subscribe(observerFunction: (command: any) => void) {
@@ -132,18 +197,35 @@ export class GameServiceBase {
         const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random() * this.state.screen.width);
         const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random() * this.state.screen.height);
 
-        this.state.players[playerId] = {
-            playerId,
-            x: playerX,
-            y: playerY,
-            score: this.state.config.initialScore,
-            isConnected: true,
-            disconnectTimeout: null,
-            disconnectDuration: null,
-            disconnected: false,
-            disconnectTime: null,
-            name: command.name,
-        };
+        const existingPlayer = this.state.players[playerId];
+
+        if (existingPlayer) {
+            // Если игрок уже существует, просто обновляем его состояние
+            this.state.players[playerId] = {
+                ...existingPlayer,
+                isConnected: true,
+                disconnected: false,
+                disconnectTime: null,
+                connectTime: Date.now(),
+                timeLeft: this.playerTimers[playerId] || this.state.config.playerTimeLimit
+            };
+        } else {
+            // Если игрок новый, создаем его
+            this.state.players[playerId] = {
+                playerId,
+                x: playerX,
+                y: playerY,
+                score: this.state.config.initialScore,
+                isConnected: true,
+                disconnectTimeout: null,
+                disconnectDuration: null,
+                disconnected: false,
+                disconnectTime: null,
+                connectTime: Date.now(),
+                timeLeft: this.state.config.playerTimeLimit,
+                name: command.name // Убедитесь, что имя игрока передается в команде
+            };
+        }
 
         this.notifyAll({
             type: 'add-player',
@@ -156,32 +238,38 @@ export class GameServiceBase {
     }
 
     public disconnectPlayer(command: any) {
-        console.log('disconnect...')
+        console.log('disconnect...');
         const playerId = command.playerId;
-        if(this.state.players[playerId]){
+        if (this.state.players[playerId]) {
             const playerObj = Object.assign(this.state.players[playerId]);
             this.state.players[playerId] = {
-              ...playerObj,
-              disconnectDuration: command.disconnectDuration,
-              disconnected: command.disconnected,
-              disconnectTime: command.disconnectTime,
+                ...playerObj,
+                disconnectDuration: command.disconnectDuration,
+                disconnected: command.disconnected,
+                disconnectTime: command.disconnectTime,
             };
-        
-            this.notifyAll({
-              type: 'disconnect-player',
-              playerId,
-              disconnectDuration: command.disconnectDuration,
-              disconnected: command.disconnected,
-              disconnectTime: command.disconnectTime,
-        
-            });
-           
-        }
-      }
 
-    public removePlayer(command: any) {
+            this.notifyAll({
+                type: 'disconnect-player',
+                playerId,
+                disconnectDuration: command.disconnectDuration,
+                disconnected: command.disconnected,
+                disconnectTime: command.disconnectTime,
+            });
+
+            // Обновляем таймер
+            this.playerTimers[playerId] = this.state.players[playerId].timeLeft;
+        }
+    }
+
+      public removePlayer(command: any) {
         this.logState();
         const playerId = command.playerId;
+
+        if (this.playerTimers[playerId]) {
+            delete this.playerTimers[playerId];
+        }
+
         delete this.state.players[playerId];
 
         this.notifyAll({
