@@ -171,13 +171,13 @@ export class GameComponent implements OnInit, OnDestroy {
                 //only play sound for those users
                 if (command.playersId && command.playersId.indexOf(this.playerId) > -1)
                 {
-                    this.playAudio(command)
+                    // this.playAudio(command)
                     const haptic = initHapticFeedback()
                     haptic.impactOccurred('soft');
                 }
-                else if (command.playersId && command.playersId.length === 0) {
-                    this.playAudio(command)
-                }
+                // else if (command.playersId && command.playersId.length === 0) {
+                //     this.playAudio(command)
+                // }
             }
 
         })

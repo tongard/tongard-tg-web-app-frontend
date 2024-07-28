@@ -66,7 +66,7 @@ export class GameServiceBase {
             initialScore: 500,
             autoDropFruitValue: 1,
             showPotsValue: false,
-            playerTimeLimit: 60000
+            playerTimeLimit: 600000
         }
     };
 
