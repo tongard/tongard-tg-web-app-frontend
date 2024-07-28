@@ -5,12 +5,14 @@
                 <td>Top 10 Players</td>
                 <td>Points</td>
                 <td>Online</td>
+                <!-- <td>time left</td> -->
             </tr>
             <tr *ngFor="let player of playersArray"
                 [ngClass]="{ 'current-player': player.playerId === playerId }">
                 <td>{{ player.name }}</td>
                 <td>{{ player.score }}</td>
                 <td>{{ player.disconnected }} {{ player.disconnectTime }} {{ player.disconnectDuration }}</td>
+                <!-- <td>{{ getValueByKey(player.playerId)}}</td> -->
             </tr>
         </table>
         <!-- <span (click)="showLog()">SHOW_LOG</span> -->

@@ -112,9 +112,7 @@ export class AppComponent {
         public globalService: GlobalService,
         private router: Router,
         private scrollService: ScrollControlService,
-        @Inject(TUI_IS_MOBILE) readonly isMobile: boolean,
-        
-        private socketService: CustomSocketService
+        @Inject(TUI_IS_MOBILE) readonly isMobile: boolean
 
     ) {
 
@@ -124,8 +122,25 @@ export class AppComponent {
         const browserLang: any = translate.getBrowserLang();
         globalService.setLng(browserLang.match(/en|ru/) ? browserLang : 'en')
         translate.use(globalService.getLng());
-
-
+        let stateMenu:boolean = false;
+        this.globalService.getMenuState().subscribe(state =>{
+            console.log(stateMenu, state)
+            if(state === true && stateMenu === false){
+                console.log('show table bar')
+                this.tableBarsService
+                .open(this.tableBarTemplate || '', {
+                    adaptive: true,
+                }).pipe(takeUntil(this.destroyTableBar$))
+                .subscribe();
+                this.cdRef.markForCheck()
+                this.cdRef.detectChanges()
+                stateMenu = true;
+            } else if(state === false){
+                console.log('hide')
+                this.destroyTableBar$.next();
+                stateMenu = false;
+            }
+        })
         this.login().pipe(
             takeUntil(this.destroy$)
         ).subscribe(e => {
@@ -134,23 +149,6 @@ export class AppComponent {
 
                 this.globalService.setAdmin(e.type === 'admin' ? true : false)
                 this.globalService.setToken(this.token)
-                
-
-                this.socketService.on('start').subscribe((data) => {
-                    console.log('Received data:', data);
-                  });
-                // this.socketService.connect(this.token);
-
-                // this.subscription.add(
-                //   this.socketService.onEvent('notify').subscribe(message => {
-                //     console.log('Received notification:', message);
-                // }))
-                // setInterval(()=>{
-                //     console.log('sendMessage')
-                //     this.socketService.emit('sendMessage', { gameId: 123 }); 
-                // },3000)
-               
-
 
                 this.globalService.refreshUser().pipe(
                     takeUntil(this.destroy$)
@@ -169,12 +167,7 @@ export class AppComponent {
                       
                     setTimeout(()=>{
                             this.isLoader = false;
-                            this.subscription = this.tableBarsService
-                            .open(this.tableBarTemplate || '', {
-                                adaptive: true,
-                            }).pipe(takeUntil(this.destroyTableBar$))
-                            .subscribe();
-                            
+                            this.globalService.showBar()                        
                     }, 2850)
 
 

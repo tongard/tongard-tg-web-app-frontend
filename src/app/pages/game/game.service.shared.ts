@@ -116,6 +116,8 @@ export class GameServiceBase {
                         expiredPlayers.push(playerId);
                     } else {
                         this.playerTimers[playerId] = remainingTime;
+                        if(this.serverSock)
+                            this.serverSock.emit('time-left', this.playerTimers)
                     }
                 }
             }
@@ -132,11 +134,11 @@ export class GameServiceBase {
     }
 
     private start() {
-        const frequency = 50000;
+        const frequency = 3000;
         setInterval(() => 
         {
             let countFruits = Object.keys(this.state.fruits).length
-            if(countFruits <= 2)
+            if(countFruits <= 20)
                 this.addFruit()
         }
         , frequency);

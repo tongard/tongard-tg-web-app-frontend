@@ -11,6 +11,9 @@ export class GlobalService {
   userState:any;
   private userSubject = new BehaviorSubject<any>(null);
   user$: Observable<any> = this.userSubject.asObservable();
+
+  private barMenuSub = new BehaviorSubject<any>(null);
+  barMenu$: Observable<any> = this.barMenuSub.asObservable();
   private lng: string = 'en';
   constructor(private userService: UserService) {
     this.token = {};
@@ -45,6 +48,18 @@ export class GlobalService {
 
   setUser(user: any) {
     this.userSubject.next(user);
+  }
+
+  showBar() {
+    this.barMenuSub.next(true);
+  }
+
+  hideBar() {
+    this.barMenuSub.next(false);
+  }
+
+  getMenuState(): Observable<any> {
+    return this.barMenu$;
   }
 
   getUser(): Observable<any> {

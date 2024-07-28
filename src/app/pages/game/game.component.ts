@@ -33,6 +33,7 @@ import {PolymorpheusContent} from '@tinkoff/ng-polymorpheus';
 export class GameComponent implements OnInit, OnDestroy {
 
     public playerId: string;
+    timeleft: any;
     playersArray: Player[] = [];
     score = 0;
 
@@ -98,6 +99,11 @@ export class GameComponent implements OnInit, OnDestroy {
         return firstInitial + secondInitial;
     }
 
+    getValueByKey(key: string) {
+            if(key && this.timeleft[key])
+        return this.timeleft[key];
+      }
+
     private setupSocketListeners(): void {
 
 
@@ -124,8 +130,13 @@ export class GameComponent implements OnInit, OnDestroy {
         this.socket.on('setup').subscribe(state => {
             //this.setupGameState(state);
             this.gameService.setState(state);
+            console.log(state)
             this.keyboardService.registerPlayerId(this.playerId); 
   
+        })
+
+        this.socket.on('time-left').subscribe(timeLeft => {
+            this.timeleft = timeLeft;
         })
 
         this.socket.on('disconnect-player').subscribe(command => {
@@ -187,6 +198,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit(){
+        this.globalService.hideBar();
 
         this.showDialogWithCustomButton()
         this.keyboardService.subscribe((command) => {
@@ -249,7 +261,7 @@ export class GameComponent implements OnInit, OnDestroy {
         canvas.height = height * pixelsPerFields;
     }
 
-    navigateTo(path: string, isDestroyMenu = false) {
+    navigateTo(path: string) {
         this.router.navigate([path]);
     }
 
@@ -395,7 +407,8 @@ export class GameComponent implements OnInit, OnDestroy {
  
         this.dialogs.open(content).subscribe({
             complete: () => {
-                this.navigateTo('/')
+                this.navigateTo('/');
+                this.globalService.showBar();
             },
 
         });
