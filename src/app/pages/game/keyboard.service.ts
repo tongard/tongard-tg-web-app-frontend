@@ -9,6 +9,8 @@ export class KeyboardService {
   private playerId: string | null = null;
 
   private keydownSubject = new Subject<{ keyPressed: string, playerId: string | null }>();
+  private lastSendTime: number = 0; 
+  private delay: number = 120; 
 
   constructor() {
     this.keydownSubject.subscribe(command => {
@@ -40,12 +42,16 @@ export class KeyboardService {
   private handleKeydown(event: KeyboardEvent): void {
     const keyPressed = event.key;
 
-    const command = {
-      type: 'move-player',
-      playerId: this.playerId,
-      keyPressed
-    };
+    const currentTime = Date.now();
+    if (currentTime - this.lastSendTime > this.delay) {
+      const command = {
+        type: 'move-player',
+        playerId: this.playerId,
+        keyPressed
+      };
 
-    this.keydownSubject.next(command);
+      this.keydownSubject.next(command);
+      this.lastSendTime = currentTime;
+    }
   }
 }

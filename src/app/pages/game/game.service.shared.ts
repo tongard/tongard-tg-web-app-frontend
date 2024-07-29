@@ -1,4 +1,3 @@
-// shared/game.service.shared.ts
 import { Subject } from 'rxjs';
 
 export const mod = (x: number, y: number): number => ((y % x) + x) % x;
@@ -34,8 +33,8 @@ export interface Player {
     disconnected: boolean;
     disconnectDuration: number | null;
     disconnectTime: any;
-    connectTime: number; // Время подключения
-    timeLeft: number; // Оставшееся время в миллисекундах
+    connectTime: number; 
+    timeLeft: number; 
 }
 
 export interface Fruit {
@@ -80,7 +79,7 @@ export class GameServiceBase {
         if(this.serverSock === null){
             this.serverSock = server;
             this.subscribe((command) => {
-                 console.log(`> Emitting ${command.type}`);
+                //  console.log(`> Emitting ${command.type}`);
                  this.serverSock.emit(command.type, command);
              })
         }
@@ -97,11 +96,11 @@ export class GameServiceBase {
         
     }
 
-    private startGlobalTimer() {
-        if (this.globalTimer) {
-            clearInterval(this.globalTimer);
-        }
-
+    // private startGlobalTimer() {
+    //     if (this.globalTimer) {
+    //         clearInterval(this.globalTimer);
+    //     }
+        /*
         this.globalTimer = setInterval(() => {
             const now = Date.now();
             const expiredPlayers: string[] = [];
@@ -131,10 +130,11 @@ export class GameServiceBase {
                 this.finishGame(playerId);
             }
         }, 1000); // Проверяем каждую секунду
-    }
+        */
+    // }
 
     private start() {
-        const frequency = 3000;
+        const frequency = 5000;
         setInterval(() => 
         {
             let countFruits = Object.keys(this.state.fruits).length
@@ -143,41 +143,26 @@ export class GameServiceBase {
         }
         , frequency);
 
-        this.startGlobalTimer();
+        // this.startGlobalTimer();
         
     }
 
-    private finishGame(playerId: string) {
-        const player = this.state.players[playerId];
-        if (player) {
-            this.removePlayer({ playerId });
+    // private finishGame(playerId: string) {
+    //     const player = this.state.players[playerId];
+    //     if (player) {
+    //         this.removePlayer({ playerId });
 
-            // Уведомление о завершении игры
-            this.gameFinishSubject.next({
-                playerId,
-                score: player.score
-            });
-        }
-    }
+    //         // Уведомление о завершении игры
+    //         this.gameFinishSubject.next({
+    //             playerId,
+    //             score: player.score
+    //         });
+    //     }
+    // }
 
     public subscribe(observerFunction: (command: any) => void) {
         this.observers.push(observerFunction);
     }
-
-    private safeStringify(obj: any, replacer: any = null, spaces: number = 2): string {
-        const cache = new Set();
-        return JSON.stringify(obj, (key, value) => {
-            if (typeof value === 'object' && value !== null) {
-                if (cache.has(value)) {
-                    // Циклическая ссылка
-                    return;
-                }
-                cache.add(value);
-            }
-            return value;
-        }, spaces);
-    }
-
 
 
     public notifyAll(command: any) {
@@ -240,7 +225,7 @@ export class GameServiceBase {
     }
 
     public disconnectPlayer(command: any) {
-        console.log('disconnect...');
+        // console.log('disconnect...');
         const playerId = command.playerId;
         if (this.state.players[playerId]) {
             const playerObj = Object.assign(this.state.players[playerId]);
@@ -430,20 +415,52 @@ export class GameServiceBase {
 
     private explodeFruits(totalFruits: number, x: number, y: number) {
         const quantity = Math.ceil(totalFruits / 9);
-        this.addFruit({ fruitId: `${x}-${y}`, fruitX: x, fruitY: y, quantity });
-        this.addFruit({ fruitId: `${x}-${mod(y + 1, this.state.screen.height)}`, fruitX: x, fruitY: mod(y + 1, this.state.screen.height), quantity });
-        this.addFruit({ fruitId: `${x}-${mod(y - 1, this.state.screen.height)}`, fruitX: x, fruitY: mod(y - 1, this.state.screen.height), quantity });
-        this.addFruit({ fruitId: `${mod(x + 1, this.state.screen.width)}-${y}`, fruitX: mod(x + 1, this.state.screen.width), fruitY: y, quantity });
-        this.addFruit({ fruitId: `${mod(x - 1, this.state.screen.width)}-${y}`, fruitX: mod(x - 1, this.state.screen.width), fruitY: y, quantity });
-        this.addFruit({ fruitId: `${mod(x - 1, this.state.screen.width)}-${mod(y - 1, this.state.screen.height)}`, fruitX: mod(x - 1, this.state.screen.width), fruitY: mod(y - 1, this.state.screen.height), quantity });
-        this.addFruit({ fruitId: `${mod(x - 1, this.state.screen.width)}-${mod(y + 1, this.state.screen.height)}`, fruitX: mod(x - 1, this.state.screen.width), fruitY: mod(y + 1, this.state.screen.height), quantity });
-        this.addFruit({ fruitId: `${mod(x + 1, this.state.screen.width)}-${mod(y - 1, this.state.screen.height)}`, fruitX: mod(x + 1, this.state.screen.width), fruitY: mod(y - 1, this.state.screen.height), quantity });
-        this.addFruit({ fruitId: `${mod(x + 1, this.state.screen.width)}-${mod(y + 1, this.state.screen.height)}`, fruitX: mod(x + 1, this.state.screen.width), fruitY: mod(y + 1, this.state.screen.height), quantity });
+        const fruitsToAdd = [
+            { fruitId: `${x}-${y}`, x, y, quantity },
+            { fruitId: `${x}-${mod(y + 1, this.state.screen.height)}`, x, y: mod(y + 1, this.state.screen.height), quantity },
+            { fruitId: `${x}-${mod(y - 1, this.state.screen.height)}`, x, y: mod(y - 1, this.state.screen.height), quantity },
+            { fruitId: `${mod(x + 1, this.state.screen.width)}-${y}`, x: mod(x + 1, this.state.screen.width), y, quantity },
+            { fruitId: `${mod(x - 1, this.state.screen.width)}-${y}`, x: mod(x - 1, this.state.screen.width), y, quantity },
+            { fruitId: `${mod(x - 1, this.state.screen.width)}-${mod(y - 1, this.state.screen.height)}`, x: mod(x - 1, this.state.screen.width), y: mod(y - 1, this.state.screen.height), quantity },
+            { fruitId: `${mod(x - 1, this.state.screen.width)}-${mod(y + 1, this.state.screen.height)}`, x: mod(x - 1, this.state.screen.width), y: mod(y + 1, this.state.screen.height), quantity },
+            { fruitId: `${mod(x + 1, this.state.screen.width)}-${mod(y - 1, this.state.screen.height)}`, x: mod(x + 1, this.state.screen.width), y: mod(y - 1, this.state.screen.height), quantity },
+            { fruitId: `${mod(x + 1, this.state.screen.width)}-${mod(y + 1, this.state.screen.height)}`, x: mod(x + 1, this.state.screen.width), y: mod(y + 1, this.state.screen.height), quantity }
+        ];
+    
+        this.bufferedFruitsToAdd = fruitsToAdd;
+        this.applyBufferedFruits();
     }
+    
+    private bufferedFruitsToAdd: { fruitId: string, x: number, y: number, quantity: number }[] = [];
+    
+    private applyBufferedFruits() {
+        this.bufferedFruitsToAdd.forEach(fruit => {
+            const oldQuantity = this.state.fruits[fruit.fruitId] ? this.state.fruits[fruit.fruitId].quantity : 0;
+            this.state.fruits[fruit.fruitId] = {
+                x: fruit.x,
+                y: fruit.y,
+                quantity: oldQuantity + fruit.quantity > 100 ? 0 : oldQuantity + fruit.quantity
+            };
+        });
+    
+        this.bufferedFruitsToAdd.forEach(fruit => {
+            this.notifyAll({
+                type: 'add-fruit',
+                fruitId: fruit.fruitId,
+                fruitX: fruit.x,
+                fruitY: fruit.y,
+                quantity: fruit.quantity
+            });
+        });
+    
+        this.bufferedFruitsToAdd = [];
+    }
+
+    
 
     private logCommand(command: any) {
         if(this.logger !== null)
-            this.logger.log('Command:', command); // Используйте this.logger
+            this.logger.log('Command:', command); 
     }
 
     private logState() {

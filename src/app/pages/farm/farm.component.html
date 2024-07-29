@@ -4,6 +4,30 @@
             <div class="some-figure"></div>
         </figure>
         <div>
+
+            <button
+            tuiButton
+            type="button"
+            class="tui-space_right-3 tui-space_bottom-3"
+            (click)="navigateTo('/user-game')"
+   
+        >
+            Play
+        </button>
+        </div>
+    </div>
+</tui-island>
+
+
+
+
+
+<tui-island size="l" textAlign="center">
+    <div class="tui-island__content">
+        <figure class="tui-island__figure">
+            <div class="some-figure"></div>
+        </figure>
+        <div>
             <h3 *ngIf="user" class="tui-island__title">GTNM {{user.user.points}} </h3>
             <p class="tui-island__paragraph">
                 <label *ngIf="value$ | async as value" tuiProgressLabel class="label-wrapper ">

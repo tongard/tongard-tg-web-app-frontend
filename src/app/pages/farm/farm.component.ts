@@ -12,6 +12,7 @@ import { ScrollControlService } from '../../services/scroll.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateConfigModule } from '../../translate-config.module';
 import { initHapticFeedback } from '@tma.js/sdk';
+import { Router } from '@angular/router';
 
 @Component({
     standalone: true,
@@ -55,6 +56,7 @@ export default class FarmComponent {
     private destroy$ = new Subject<void>();
 
     constructor(
+        private router: Router,
         public translate: TranslateService,
         private farmService: FarmService,
         private cdRef: ChangeDetectorRef,
@@ -115,6 +117,10 @@ export default class FarmComponent {
 
             this.isLoader = false;
         });
+    }
+
+    navigateTo(path: string) {
+        this.router.navigate([path]);
     }
 
     farmPoints() {

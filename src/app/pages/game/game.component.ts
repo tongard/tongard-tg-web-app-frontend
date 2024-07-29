@@ -202,6 +202,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
         this.showDialogWithCustomButton()
         this.keyboardService.subscribe((command) => {
+            console.log(command)
              this.socket.emit('move-player', command)
         });
 
