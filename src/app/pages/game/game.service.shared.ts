@@ -90,8 +90,8 @@ export class GameServiceBase {
     }
 
     constructor(isStart:boolean = false) {
-        if(isStart === true)
-            this.start();
+        // if(isStart === true)
+        //     this.start();
 
         
     }
@@ -133,7 +133,7 @@ export class GameServiceBase {
         */
     // }
 
-    private start() {
+    protected start(name = 0) {
         const frequency = 5000;
         setInterval(() => 
         {
@@ -229,7 +229,7 @@ export class GameServiceBase {
         const playerId = command.playerId;
         if (this.state.players[playerId]) {
             const playerObj = Object.assign(this.state.players[playerId]);
-            this.state.players[playerId] = {
+            this.state.players[playerId] = { 
                 ...playerObj,
                 disconnectDuration: command.disconnectDuration,
                 disconnected: command.disconnected,

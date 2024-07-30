@@ -124,6 +124,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
         this.socket.on('disconnect').subscribe(e => {
             console.log('Disconnected');
+            this.navigateTo('/')
             // Handle cleanup if needed
         })
 
@@ -149,6 +150,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
         this.socket.on('remove-player').subscribe(command => {
             this.gameService.removePlayer(command);
+            if(command.playerId === this.playerId){
+                this.socket.disconnect();
+            }
+
         })
 
         this.socket.on('move-player').subscribe(command => {
