@@ -145,7 +145,7 @@ export class GameComponent implements OnInit, OnDestroy {
         })
 
         this.socket.on('add-player').subscribe(command => {
-            this.gameService.addPlayer(command);
+            this.gameService.addPlayer(command, this.socket.getId());
         })
 
         this.socket.on('remove-player').subscribe(command => {
@@ -287,6 +287,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
         for (const fruitId in this.gameService.state.fruits) {
             const fruit = this.gameService.state.fruits[fruitId];
+            
             this.drawPot(context, fruit, potionsImg);
         }
         this.playersArray = Object.values(this.gameService.state.players).sort((a:any, b:any) => b.score - a.score);
@@ -342,11 +343,11 @@ export class GameComponent implements OnInit, OnDestroy {
     private drawPot(context: CanvasRenderingContext2D, fruit: any, potionsImg: HTMLImageElement): void {
         const { pixelsPerFields } = this.gameService.state.screen;
         let { x, y, quantity } = fruit;
-        x *= pixelsPerFields;
-        y *= pixelsPerFields;
+        x *= pixelsPerFields; //где на карте
+        y *= pixelsPerFields; // где на карте
 
-        const pictSize = 16;
-        let column = Math.floor((quantity - 1) % 10);
+        const pictSize = 64;
+        let column = Math.floor((quantity - 1) % 120);
         let line = Math.floor((quantity - 1) / 10);
 
         if (line > 0 && column < 9) line--;
@@ -356,7 +357,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
         const spriteX = line * pictSize;
         const spriteY = column * pictSize;
-        context.drawImage(potionsImg, spriteY, spriteX, 16, 16, x, y, pixelsPerFields, pixelsPerFields);
+        context.drawImage(potionsImg, spriteX === 0 ? 0 : spriteX+(spriteY/64), 0, 64, 64, x, y, pixelsPerFields, pixelsPerFields);
+ 
 
         if (this.gameService.state.config.showPotsValue) {
             context.fillStyle = 'black';

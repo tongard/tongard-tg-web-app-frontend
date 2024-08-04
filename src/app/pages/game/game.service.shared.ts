@@ -35,6 +35,7 @@ export interface Player {
     disconnectTime: any;
     connectTime: number; 
     timeLeft: number; 
+    connections: Set<string>; 
 }
 
 export interface Fruit {
@@ -54,9 +55,9 @@ export class GameServiceBase {
         },
         fruits: {},
         screen: {
-            width: 25,
-            height: 25,
-            pixelsPerFields: 16,
+            width: 12,
+            height: 12,
+            pixelsPerFields: 64,
         },
         config: {
             maxCollisionDistance: 4,
@@ -89,50 +90,29 @@ export class GameServiceBase {
         return this.serverSock;
     }
 
-    constructor(isStart:boolean = false) {
-        // if(isStart === true)
-        //     this.start();
-
-        
+    constructor(isStart:boolean = false) {        
     }
 
-    // private startGlobalTimer() {
-    //     if (this.globalTimer) {
-    //         clearInterval(this.globalTimer);
-    //     }
-        /*
-        this.globalTimer = setInterval(() => {
-            const now = Date.now();
-            const expiredPlayers: string[] = [];
-
-            for (const playerId in this.state.players) {
-                const player = this.state.players[playerId];
-                if (player.isConnected) {
-                    const timeElapsed = now - player.connectTime;
-                    const remainingTime = this.state.config.playerTimeLimit - timeElapsed;
-                    
-                    if (remainingTime <= 0) {
-                        expiredPlayers.push(playerId);
-                    } else {
-                        this.playerTimers[playerId] = remainingTime;
-                        if(this.serverSock)
-                            this.serverSock.emit('time-left', this.playerTimers)
-                    }
-                }
-            }
-
-            for (const playerId of expiredPlayers) {
+    public removeConnection(playerId: string, connectionId: string) {
+        const player = this.state.players[playerId];
+        if (player) {
+            player.connections.delete(connectionId);
+            if (player.connections.size === 0) {
+                    // this.removePlayer({ playerId });
+                    player.disconnectTime = new Date(); //give 15 sec timer for disconnect
+            } else {
                 this.notifyAll({
-                    type: 'player-timeout',
+                    type: 'disconnect-player',
                     playerId,
-                    score: this.state.players[playerId].score
+                    disconnectDuration: player.disconnectDuration,
+                    disconnected: player.disconnected,
+                    disconnectTime: player.disconnectTime,
                 });
-                this.finishGame(playerId);
             }
-        }, 1000); // Проверяем каждую секунду
-        */
-    // }
+        }
+    }
 
+  
     protected start(name = 0) {
         const frequency = 5000;
         setInterval(() => 
@@ -143,22 +123,10 @@ export class GameServiceBase {
         }
         , frequency);
 
-        // this.startGlobalTimer();
+
         
     }
 
-    // private finishGame(playerId: string) {
-    //     const player = this.state.players[playerId];
-    //     if (player) {
-    //         this.removePlayer({ playerId });
-
-    //         // Уведомление о завершении игры
-    //         this.gameFinishSubject.next({
-    //             playerId,
-    //             score: player.score
-    //         });
-    //     }
-    // }
 
     public subscribe(observerFunction: (command: any) => void) {
         this.observers.push(observerFunction);
@@ -178,26 +146,28 @@ export class GameServiceBase {
         this.logState();
     }
 
-    public addPlayer(command: any) {
+    public addPlayer(command: any, connectionId: string) { 
         this.logState();
         const playerId = command.playerId;
         const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random() * this.state.screen.width);
         const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random() * this.state.screen.height);
 
-        const existingPlayer = this.state.players[playerId];
+        const existingPlayer:Player = this.state.players[playerId];
+        
 
         if (existingPlayer) {
             // Если игрок уже существует, просто обновляем его состояние
-            this.state.players[playerId] = {
-                ...existingPlayer,
-                isConnected: true,
-                disconnected: false,
-                disconnectTime: null,
-                connectTime: Date.now(),
-                timeLeft: this.playerTimers[playerId] || this.state.config.playerTimeLimit
-            };
+                console.log('player exist service')
+                existingPlayer.connections.add(connectionId);
+                existingPlayer.isConnected = true;
+                existingPlayer.disconnected = false;
+                existingPlayer.disconnectTime = null;
+                existingPlayer.connectTime = Date.now();
+                existingPlayer.timeLeft = this.playerTimers[playerId] || this.state.config.playerTimeLimit;
+         
         } else {
             // Если игрок новый, создаем его
+           
             this.state.players[playerId] = {
                 playerId,
                 x: playerX,
@@ -210,7 +180,8 @@ export class GameServiceBase {
                 disconnectTime: null,
                 connectTime: Date.now(),
                 timeLeft: this.state.config.playerTimeLimit,
-                name: command.name // Убедитесь, что имя игрока передается в команде
+                name: command.name, // Убедитесь, что имя игрока передается в команде
+                connections: new Set([connectionId]) 
             };
         }
 

@@ -26,6 +26,7 @@ export class CustomSocketService implements OnDestroy {
           };
 
           const socket = new Socket(config);
+
           this.socket$.next(socket);
           return socket.fromEvent<any>('connect').pipe(takeUntil(this.destroy$));
         } else {
@@ -60,5 +61,10 @@ export class CustomSocketService implements OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.disconnect(); // Закрываем сокет при уничтожении сервиса
+  }
+
+  getId(): string {
+    const socket:any = this.socket$.getValue();
+    return socket ? socket?.id : 'empty';
   }
 }
