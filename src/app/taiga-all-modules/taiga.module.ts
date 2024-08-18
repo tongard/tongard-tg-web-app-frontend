@@ -181,13 +181,14 @@ import {
 } from '@taiga-ui/addon-mobile';
 
 import {
-	TuiTableBarsHostModule
-} from '@taiga-ui/addon-tablebars';
+	TuiTableBarsHostComponent
+} from '@taiga-ui/legacy';
 
 
-	import {  TuiBlockStatus} from '@taiga-ui/layout';
+	import {  TuiBlockStatus, TuiAppBar} from '@taiga-ui/layout';
 
 export const TAIGA_MODULES = [
+	TuiTableBarsHostComponent,
 	TuiSegmented,
 	TuiChip,
 	TuiButtonGroup,
