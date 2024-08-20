@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserService } from '../pages/earn/services/user.service';
+import { UserService } from './user.service';
 import { BehaviorSubject, Observable, take, tap } from 'rxjs';
 
 @Injectable({

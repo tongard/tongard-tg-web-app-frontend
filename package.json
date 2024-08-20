@@ -71,8 +71,8 @@
         "@sentry/angular": "^8.18.0",
         "@sentry/cli": "^2.32.2",
         "@taiga-ui/addon-charts": "4.2.0",
-        "@taiga-ui/addon-table": "^4.2.0",
         "@taiga-ui/addon-mobile": "4.2.0",
+        "@taiga-ui/addon-table": "^4.2.0",
         "@taiga-ui/cdk": "4.2.0",
         "@taiga-ui/core": "4.2.0",
         "@taiga-ui/experimental": "4.2.0",
@@ -85,9 +85,11 @@
         "@tma.js/sdk": "^2.6.0",
         "@types/canvas-confetti": "^1.6.4",
         "canvas-confetti": "^1.9.3",
+        "joystick-controller": "^1.0.15",
         "ngx-socket-io": "^4.7.0",
         "rxjs": "7.8.1",
         "tslib": "2.6.3",
+        "virtual-gamepad-lib": "^0.1.1",
         "zone.js": "0.14.10"
     },
     "devDependencies": {

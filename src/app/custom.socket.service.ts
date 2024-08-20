@@ -16,6 +16,7 @@ export class CustomSocketService implements OnDestroy {
     this.tokenService.token$.pipe(
       switchMap((token) => {
         if (token) {
+          console.log(token)
           const config: SocketIoConfig = {
             url: environment.baseUrl, // Замените на ваш URL
             options: {

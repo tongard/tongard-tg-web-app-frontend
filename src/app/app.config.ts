@@ -1,15 +1,9 @@
 import type { ApplicationConfig } from '@angular/core';
 import { APP_INITIALIZER, ErrorHandler, importProvidersFrom, } from '@angular/core';
-import { provideClientHydration } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
-import {
-    TUI_SANITIZER,
+import {provideAnimations} from '@angular/platform-browser/animations';
 
-    TuiRootModule,
-} from '@taiga-ui/core';
 
-import { NgDompurifySanitizer } from '@tinkoff/ng-dompurify';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { TokenInterceptor } from './interceptors/token.interceptor';
@@ -18,11 +12,12 @@ import { environment } from '../environments/environment';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import * as Sentry from "@sentry/angular";
 import { CustomSocketService } from './custom.socket.service';
+import {NG_EVENT_PLUGINS} from '@taiga-ui/event-plugins';
 
-// const config: SocketIoConfig = { url: environment.baseUrl, options: {} };
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        NG_EVENT_PLUGINS,
         {
             provide: ErrorHandler,
             useValue: Sentry.createErrorHandler(),
@@ -39,7 +34,7 @@ export const appConfig: ApplicationConfig = {
         },
         provideAnimations(),
         provideRouter(routes),
-        provideClientHydration(),
+
         provideHttpClient(withInterceptorsFromDi(), withFetch()),
         {
             provide: HTTP_INTERCEPTORS,
@@ -48,15 +43,10 @@ export const appConfig: ApplicationConfig = {
         },
 
         importProvidersFrom(
-            TuiRootModule,
-            TAIGA_MODULES,
+            // TAIGA_MODULES,
             HttpClientModule,
             CustomSocketService
             // SocketIoModule.forRoot(config)
         ),
-        {
-            provide: TUI_SANITIZER,
-            useClass: NgDompurifySanitizer,
-        },
     ],
 };
