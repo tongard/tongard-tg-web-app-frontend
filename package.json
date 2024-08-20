@@ -6,14 +6,15 @@
     "scripts": {
         "prepare": "husky",
         "start": "ng serve --host 0.0.0.0",
-        "build": "npx nx build taiga-lumbermill",
+        "build": "ng build --configuration production",
         "lint": "eslint .",
         "test": "nx test taiga-lumbermill",
         "cspell": "cspell --relative --dot --gitignore .",
         "typecheck": "tsc --noEmit --skipLibCheck --incremental false --tsBuildInfoFile null --project tsconfig.json",
         "prettier": "prettier !package-lock.json !taiga-ui/** . --ignore-path .gitignore",
         "format": "npm run prettier -- --write",
-        "stylelint": "stylelint './apps/**/*.{less,css}' --config package.json"
+        "stylelint": "stylelint './apps/**/*.{less,css}' --config package.json",
+        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org home-tos --project fe-tongard ./dist/frontend-app && sentry-cli sourcemaps upload --org home-tos --project fe-tongard ./dist/frontend-app"
     },
     "commitlint": {
         "extends": [
