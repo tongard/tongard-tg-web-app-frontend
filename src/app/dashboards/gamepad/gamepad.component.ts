@@ -33,8 +33,8 @@ export class GamepadComponent {
       if (currentTime - this.lastEmitTime > this.emitInterval) {
         obj.y = obj.y + 90;
         obj.x = obj.x + 90;
-
-        this.socket.emit('move-arm', {x:obj.y, y:obj.x});
+        console.log(obj)
+        this.socket.emit('move-arm', {x:obj.y, y:180-obj.x});
         this.lastEmitTime = currentTime;
       }
     });
