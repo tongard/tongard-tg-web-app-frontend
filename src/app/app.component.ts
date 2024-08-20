@@ -1,11 +1,14 @@
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {TuiRoot} from '@taiga-ui/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { TuiRoot } from '@taiga-ui/core';
 
-import {ThemeService} from '@services/theme.service';
-import {NavigationComponent} from './navigation/navigation.component';
+import { ThemeService } from '@services/theme.service';
+import { NavigationComponent } from './navigation/navigation.component';
 import { CustomSocketService } from './custom.socket.service';
 import { TokenService } from './token.service';
+import { catchError, Observable, retryWhen, Subject, switchMap, takeUntil, throwError, timer } from 'rxjs';
+import { environment } from '@environments/environment';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     standalone: true,
@@ -17,9 +20,53 @@ import { TokenService } from './token.service';
 })
 export class AppComponent {
     protected themeService = inject(ThemeService);
-    public title = 'taiga-lumbermill';
-    constructor(private tokenService: TokenService, private socket: CustomSocketService){
-        this.tokenService.setToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlciI6e30sImlhdCI6MTcyNDA3MTQ0NH0.T2i9C7ycT0UN3Vz4GD6lo9yQHq4VMxXp3hZ8orYcc_c');
+    private destroy$ = new Subject<void>();
+    constructor(
+        private tokenService: TokenService,
+        private socket: CustomSocketService,
+        private http: HttpClient
+    ) {
 
+        this.login().pipe(
+            takeUntil(this.destroy$)
+        ).subscribe((e: any) => {
+            if (e.token) {
+
+                this.tokenService.setToken(e.token);
+
+            }
+        })
+    }
+
+    login(): Observable<any> {
+        return this.http.post(`${environment.baseUrl}/api/auth/login`, {}).pipe(
+            retryWhen(errors =>
+                errors.pipe(
+                    switchMap((error, index) => {
+                        if (index < 3 && this.shouldRetry(error)) {
+                            return timer(3000);
+                        }
+                        return throwError(error);
+                    })
+                )
+            ),
+            catchError(this.handleError)
+        );
+    }
+
+    private shouldRetry(error: HttpErrorResponse): boolean {
+        // Retry only for 502 errors
+        return error.status === 502;
+    }
+
+    private handleError(error: HttpErrorResponse) {
+        console.error('An error occurred:', error.message);
+        // You can return a user-friendly error message here
+        return throwError('Something went wrong; please try again later.');
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
