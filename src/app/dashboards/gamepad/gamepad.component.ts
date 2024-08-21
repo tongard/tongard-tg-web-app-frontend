@@ -20,7 +20,8 @@ export class GamepadComponent {
   coordinates = {
     x:90,
     y:90,
-    z:90
+    z:90,
+    d:90
   }
 
   constructor(private socket: CustomSocketService) {}
@@ -73,9 +74,10 @@ export class GamepadComponent {
     (obj: any) => {
       const currentTime = Date.now();
       if (currentTime - this.lastEmitTime > this.emitInterval) {
+        obj.x = obj.x + 90;
         obj.y = obj.y + 90;
 
-        this.coordinates = {...this.coordinates, z:obj.y}
+        this.coordinates = {...this.coordinates, z:obj.y, d:obj.x}
 
         this.socket.emit('move-arm', this.coordinates);
         this.lastEmitTime = currentTime;
