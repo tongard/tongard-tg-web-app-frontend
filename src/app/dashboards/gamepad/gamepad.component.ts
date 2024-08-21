@@ -77,7 +77,7 @@ export class GamepadComponent {
         obj.x = obj.x + 140;
         obj.y = obj.y + 140;
 
-        this.coordinates = {...this.coordinates, z:obj.x, d:obj.y}
+        this.coordinates = {...this.coordinates, z:obj.x, d:140-obj.y}
 
         this.socket.emit('move-arm', this.coordinates);
         this.lastEmitTime = currentTime;
