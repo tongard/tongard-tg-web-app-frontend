@@ -88,14 +88,19 @@ export class GamepadComponent {
         obj.x = obj.x + 140;
         obj.y = obj.y + 140;
 
-        this.coordinates = {...this.coordinates, z:obj.x, d:140-obj.y}
+        this.coordinates = {...this.coordinates, z:this.mapRange(obj.x, 0, 180, 70, 90), d:140-obj.y}
 
         this.socket.emit('move-arm', this.coordinates);
         this.lastEmitTime = currentTime;
+        this.cdref.markForCheck()
       }
     });
 
 
+  }
+
+   mapRange(value:any, minFrom:any, maxFrom:any, minTo:any, maxTo:any) {
+    return (value - minFrom) * (maxTo - minTo) / (maxFrom - minFrom) + minTo;
   }
 
   ngOnDestroy(){
