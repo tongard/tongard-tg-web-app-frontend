@@ -25,6 +25,7 @@ import type {PolymorpheusContent} from '@taiga-ui/polymorpheus';
 import {CryptoService} from '../../../../services/crypto.service';
 import {CoinIconPipe} from '../../pipes/coin-icon.pipe';
 import { TuiTabBar } from '@taiga-ui/addon-mobile';
+import { GamepadComponent } from 'src/app/dashboards/gamepad/gamepad.component';
 
 @Component({
     standalone: true,
@@ -43,7 +44,8 @@ import { TuiTabBar } from '@taiga-ui/addon-mobile';
         TuiHeader,
         TuiInputNumberModule,
         TuiTitle,
-        TuiTabBar
+        TuiTabBar,
+        GamepadComponent
     ],
     templateUrl: './staking.component.html',
     styleUrl: './staking.component.less',
