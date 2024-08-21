@@ -1,4 +1,5 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 // @ts-ignore
 import JoystickController from 'joystick-controller';
 import { CustomSocketService } from 'src/app/custom.socket.service';
@@ -6,7 +7,7 @@ import { CustomSocketService } from 'src/app/custom.socket.service';
 @Component({
   selector: 'app-gamepad',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './gamepad.component.html',
   styleUrl: './gamepad.component.less'
 })
@@ -24,7 +25,16 @@ export class GamepadComponent {
     d:90
   }
 
-  constructor(private socket: CustomSocketService) {}
+  inputValue: number = 0; // Значение по умолчанию
+
+  onInputChange(value: any) {
+    console.log("Текущее значение:", value);
+    this.coordinates.z = value;
+    this.socket.emit('move-arm', this.coordinates);
+    this.cdref.markForCheck()
+  }
+
+  constructor(private socket: CustomSocketService, private cdref: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     this.joystick = new JoystickController({
@@ -51,6 +61,7 @@ export class GamepadComponent {
         this.coordinates = {...this.coordinates, x:obj.y, y:180-obj.x}
         this.socket.emit('move-arm', this.coordinates);
         this.lastEmitTime = currentTime;
+        this.cdref.markForCheck()
       }
     });
 
