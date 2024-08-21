@@ -95,12 +95,13 @@ export class GamepadComponent {
         this.cdref.markForCheck()
       }
     });
+    
 
 
   }
 
    mapRange(value:any, minFrom:any, maxFrom:any, minTo:any, maxTo:any) {
-    return (value - minFrom) * (maxTo - minTo) / (maxFrom - minFrom) + minTo;
+    return parseInt((value - minFrom) * (maxTo - minTo) / (maxFrom - minFrom) + minTo);
   }
 
   ngOnDestroy(){
