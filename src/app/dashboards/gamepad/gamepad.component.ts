@@ -60,6 +60,7 @@ export class GamepadComponent {
       controllerClass: "joystick-controller",
       joystickClass: "joystick",
       zone: this.gamepadContainerRight.nativeElement, // Контейнер для джойстика
+      dynamicPositionTarget: document.getElementById("root"),
       size: 90, // Размер джойстика
       maxRange: 90,
       threshold: 0.1, // Порог для минимального движения
@@ -73,8 +74,9 @@ export class GamepadComponent {
       const currentTime = Date.now();
       if (currentTime - this.lastEmitTime > this.emitInterval) {
         obj.y = obj.y + 90;
-        obj.x = obj.x + 90;
+
         this.coordinates = {...this.coordinates, z:obj.y}
+
         this.socket.emit('move-arm', this.coordinates);
         this.lastEmitTime = currentTime;
       }
