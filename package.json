@@ -88,6 +88,7 @@
         "canvas-confetti": "^1.9.3",
         "joystick-controller": "^1.0.15",
         "ngx-socket-io": "^4.7.0",
+        "responsive-gamepad": "^1.2.1",
         "rxjs": "7.8.1",
         "tslib": "2.6.3",
         "virtual-gamepad-lib": "^0.1.1",
