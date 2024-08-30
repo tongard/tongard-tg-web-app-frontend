@@ -5,8 +5,8 @@ import { webSocket } from 'rxjs/webSocket';
   providedIn: 'root',
 })
 export class JanusService {
-  private server = 'http://tongard.org:8088/janus';
-  private janusWsUrl = 'ws://tongard.org:8188/janus'; // URL для WebSocket соединения
+  private server = 'https://tongard.org/janus';
+//   private janusWsUrl = 'ws://tongard.org:8188/janus'; // URL для WebSocket соединения
 
   private sessionId: any;
   private pluginHandleId: any;
