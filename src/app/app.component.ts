@@ -9,6 +9,7 @@ import { TokenService } from './token.service';
 import { catchError, Observable, retryWhen, Subject, switchMap, takeUntil, throwError, timer } from 'rxjs';
 import { environment } from '@environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { postEvent, initHapticFeedback } from '@tma.js/sdk';
 
 @Component({
     standalone: true,
@@ -21,6 +22,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 export class AppComponent {
     protected themeService = inject(ThemeService);
     private destroy$ = new Subject<void>();
+
+    ngAfterViewInit() {
+ 
+            postEvent('web_app_expand');
+            const haptic = initHapticFeedback()
+            haptic.notificationOccurred('success');
+    
+    }
     constructor(
         private tokenService: TokenService,
         private socket: CustomSocketService,

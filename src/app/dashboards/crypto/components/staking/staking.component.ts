@@ -26,6 +26,7 @@ import {CryptoService} from '../../../../services/crypto.service';
 import {CoinIconPipe} from '../../pipes/coin-icon.pipe';
 import { TuiTabBar } from '@taiga-ui/addon-mobile';
 import { GamepadComponent } from 'src/app/dashboards/gamepad/gamepad.component';
+import { VideoRoomComponent } from 'src/app/video-room/video-room.component';
 
 @Component({
     standalone: true,
@@ -45,7 +46,8 @@ import { GamepadComponent } from 'src/app/dashboards/gamepad/gamepad.component';
         TuiInputNumberModule,
         TuiTitle,
         TuiTabBar,
-        GamepadComponent
+        GamepadComponent,
+        VideoRoomComponent
     ],
     templateUrl: './staking.component.html',
     styleUrl: './staking.component.less',
