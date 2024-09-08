@@ -70,13 +70,13 @@ export class GamepadComponent {
       containerClass: "joystick-container",
       controllerClass: "joystick-controller",
       joystickClass: "joystick",
-      zone: this.gamepadContainer.nativeElement, // Контейнер для джойстика
-      size: 90, // Размер джойстика
+      // zone: this.gamepadContainer.nativeElement, // Контейнер для джойстика
+      // size: 90, // Размер джойстика
       maxRange: 180,
-      threshold: 0.1, // Порог для минимального движения
-      fadeTime: 250, // Время исчезновения джойстика при отсутствии активности
-      color: 'blue', // Цвет джойстика
-      multitouch: true, // Включение или отключение мультитача
+      // threshold: 0.1, // Порог для минимального движения
+      // fadeTime: 250, // Время исчезновения джойстика при отсутствии активности
+      // color: 'blue', // Цвет джойстика
+      // multitouch: true, // Включение или отключение мультитача
       x:"50%",
       y:"30%"
     },
